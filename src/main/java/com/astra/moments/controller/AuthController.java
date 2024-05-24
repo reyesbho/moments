@@ -1,64 +1,42 @@
 package com.astra.moments.controller;
 
-import com.astra.moments.dto.TokenDto;
-import com.astra.moments.dto.UrlDto;
-import com.astra.moments.dto.UserDto;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeRequestUrl;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.gson.GsonFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
+import com.astra.moments.config.JwtService;
+import com.astra.moments.dto.LoginResponse;
+import com.astra.moments.dto.LoginUserDto;
+import com.astra.moments.dto.RegisterUserDto;
+import com.astra.moments.model.User;
+import com.astra.moments.service.AuthenticationService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.io.IOException;
-import java.util.Arrays;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/auth")
 public class AuthController {
+    private final JwtService jwtService;
 
-    @Value("${spring.security.oauth2.resourceserver.opaque-token.instrospection-uri.client-id}")
-    private String clientId;
-    @Value("${spring.security.oauth2.resourceserver.opaque-token.instrospection-uri.client-secret}")
-    private String clientSecret;
+    private final AuthenticationService authenticationService;
 
-    @GetMapping("/auth/url")
-    public ResponseEntity<UrlDto> auth(){
-        String url = new GoogleAuthorizationCodeRequestUrl(
-                clientId, "http://localhost:5173", Arrays.asList("email","profile","openid")
-        ).build();
-        return ResponseEntity.ok(new UrlDto(url));
+    public AuthController(JwtService jwtService, AuthenticationService authenticationService) {
+        this.jwtService = jwtService;
+        this.authenticationService = authenticationService;
     }
 
-    @GetMapping("/auth/callback")
-    public ResponseEntity<TokenDto> callback(@RequestParam("code") String code){
-        String token;
-        try {
-             token = new GoogleAuthorizationCodeTokenRequest(
-                    new NetHttpTransport(),
-                    new GsonFactory(),
-                    clientId,
-                    clientSecret,
-                    code,
-                    "http://localhost:5173"
-            ).execute().getAccessToken();
+    @PostMapping("/signup")
+    public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
+        User registeredUser = authenticationService.signup(registerUserDto);
 
-        }catch (IOException e){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        return ResponseEntity.ok(new TokenDto(token));
+        return ResponseEntity.ok(registeredUser);
     }
 
-    @GetMapping("/auth/user")
-    public ResponseEntity<UserDto> getUser(@AuthenticationPrincipal OAuth2User user){
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
+        User authenticatedUser = authenticationService.authenticate(loginUserDto);
 
-        System.out.println(user.getAttributes());
-        return ResponseEntity.ok(UserDto.builder().email(user.getAttribute("email"))
-                .user(user.getAttribute("name")).build());
+        String jwtToken = jwtService.generateToken(authenticatedUser);
+
+        LoginResponse loginResponse = LoginResponse.builder().token(jwtToken).expiresIn(jwtService.getExpirationTime()).build();
+
+        return ResponseEntity.ok(loginResponse);
     }
+
 }

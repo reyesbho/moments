@@ -12,10 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -28,7 +26,7 @@ public class PedidoController {
         this.pedidoService = pedidoService;
     }
 
-    @GetMapping("")
+    @GetMapping("/")
     public ResponseEntity<Page<PedidoResponse>> getPedidos(@RequestParam(name = "estatus", required = false) Optional<String> estatus,
                                                            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
                                                            @RequestParam(name = "size",  defaultValue = "10", required = false) int size){
