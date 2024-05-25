@@ -26,7 +26,7 @@ public class PedidoController {
         this.pedidoService = pedidoService;
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<Page<PedidoResponse>> getPedidos(@RequestParam(name = "estatus", required = false) Optional<String> estatus,
                                                            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
                                                            @RequestParam(name = "size",  defaultValue = "10", required = false) int size){
