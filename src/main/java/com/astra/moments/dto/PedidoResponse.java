@@ -15,6 +15,7 @@ public class PedidoResponse {
 
     private Long id;
     private Date fechaEntrega;
+    private Date horaEntrega;
     private String lugarEntrega;
     private String estatus;
     private Float total;

@@ -58,8 +58,8 @@ public class PedidoController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<PedidoResponse> addPedido(@RequestBody PedidoRequest pedidoRequest, @AuthenticationPrincipal(expression = "name") String name){
-        return  new ResponseEntity<>(this.pedidoService.addPedido(pedidoRequest, name), HttpStatus.CREATED);
+    public ResponseEntity<PedidoResponse> addPedido(@RequestBody PedidoRequest pedidoRequest){
+        return  new ResponseEntity<>(this.pedidoService.addPedido(pedidoRequest), HttpStatus.CREATED);
     }
 
     @PostMapping("/{idPedido}/producto")

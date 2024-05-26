@@ -12,6 +12,8 @@ import com.astra.moments.util.MapObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -82,7 +84,9 @@ public class PedidoService {
     }
 
     @Transactional
-    public PedidoResponse addPedido(PedidoRequest newPedido, String userName) throws EntityNotFoundException {
+    public PedidoResponse addPedido(PedidoRequest newPedido) throws EntityNotFoundException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = (User) authentication.getPrincipal();
         //validar el cliente
         Cliente cliente = null;
         if (Objects.isNull(newPedido.getCliente().getId()) || newPedido.getCliente().getId() == 0){
@@ -100,13 +104,14 @@ public class PedidoService {
 
         Pedido pedidoEntity = Pedido.builder()
                 .fechaEntrega(newPedido.getFechaEntrega())
+                .horaEntrega(newPedido.getHoraEntrega())
                 .lugarEntrega(newPedido.getLugarEntrega())
                 .estatus(EstatusEnum.INCOMPLETE.getValue())
                 .total(newPedido.getTotal())
                 .fechaRegistro(new Date())
                 .fechaActualizacion(null)
                 .cliente(cliente)
-                .registradoPor(userName)
+                .registradoPor(currentUser.getUsername())
                 .numProductos(0)
                 .build();
         this.pedidoRepository.saveAndFlush(pedidoEntity);

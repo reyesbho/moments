@@ -15,8 +15,10 @@ import java.util.List;
 @NoArgsConstructor
 public class PedidoRequest {
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date fechaEntrega;
+    @DateTimeFormat(pattern = "HH:mm")
+    private Date horaEntrega;
     private String lugarEntrega;
     private Float total;
     private ClienteResponse cliente;

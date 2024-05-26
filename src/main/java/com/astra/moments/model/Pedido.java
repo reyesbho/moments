@@ -20,7 +20,11 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "fecha_entrega", nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date fechaEntrega;
+    @Column(name = "hora_entrega", nullable = true)
+    @Temporal(TemporalType.TIME)
+    private Date horaEntrega;
     @Column(name = "lugar_entrega", nullable = false)
     private String lugarEntrega;
     @Column(name = "estatus", nullable = false)

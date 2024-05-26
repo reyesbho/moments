@@ -21,6 +21,7 @@ public class MapObject {
                 .cliente(mapToClienteResponse(pedido.getCliente()))
                 .numProductos(pedido.getNumProductos())
                 .registradoPor(pedido.getRegistradoPor())
+                .horaEntrega(pedido.getHoraEntrega())
                 .build();
     }
 
