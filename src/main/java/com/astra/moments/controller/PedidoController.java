@@ -9,11 +9,14 @@ import com.astra.moments.service.PedidoService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.Optional;
 
 @RestController
@@ -28,10 +31,11 @@ public class PedidoController {
 
     @GetMapping("")
     public ResponseEntity<Page<PedidoResponse>> getPedidos(@RequestParam(name = "estatus", required = false) Optional<String> estatus,
+                                                           @RequestParam(name = "date", required = true) String date,
                                                            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
-                                                           @RequestParam(name = "size",  defaultValue = "10", required = false) int size){
+                                                           @RequestParam(name = "size",  defaultValue = "10", required = false) int size) throws ParseException {
         Pageable pageRequest = PageRequest.of(page, size);
-        Page<PedidoResponse> pedidoResponseList = this.pedidoService.getPedidos(estatus, pageRequest);
+        Page<PedidoResponse> pedidoResponseList = this.pedidoService.getPedidos(estatus, date, pageRequest);
         return new ResponseEntity<>(pedidoResponseList, HttpStatus.OK);
     }
 

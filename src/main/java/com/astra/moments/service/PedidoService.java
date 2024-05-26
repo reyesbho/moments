@@ -15,10 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class PedidoService {
@@ -40,12 +39,15 @@ public class PedidoService {
         this.productoTipoRepository = productoTipoRepository;
     }
 
-    public Page<PedidoResponse> getPedidos(Optional<String> estatus, Pageable pageable){
+    public Page<PedidoResponse> getPedidos(Optional<String> estatus,String date, Pageable pageable) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+        Date dateFilter = formatter.parse(date);
+        System.out.println(dateFilter);
         Page<Pedido> pagePedidos = null;
         if(estatus.isPresent() && ! estatus.get().equalsIgnoreCase("ALL")){
-            pagePedidos = this.pedidoRepository.findByEstatus(estatus.get(), pageable);
+            pagePedidos = this.pedidoRepository.findByEstatusAndFechaEntrega(estatus.get(),dateFilter, pageable);
         }else {
-            pagePedidos = this.pedidoRepository.findAll(pageable);
+            pagePedidos = this.pedidoRepository.findByFechaEntrega(dateFilter, pageable);
         }
 
         return new PageImpl<>(pagePedidos.getContent().stream().map(MapObject::mapToPedidoResponse).toList(),
