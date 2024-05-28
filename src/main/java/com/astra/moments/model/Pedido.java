@@ -23,7 +23,7 @@ public class Pedido {
     @Temporal(TemporalType.DATE)
     private Date fechaEntrega;
     @Column(name = "hora_entrega", nullable = true)
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date horaEntrega;
     @Column(name = "lugar_entrega", nullable = false)
     private String lugarEntrega;
