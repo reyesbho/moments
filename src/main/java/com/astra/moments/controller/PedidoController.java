@@ -31,11 +31,12 @@ public class PedidoController {
 
     @GetMapping("")
     public ResponseEntity<Page<PedidoResponse>> getPedidos(@RequestParam(name = "estatus", required = false) Optional<String> estatus,
-                                                           @RequestParam(name = "date", required = true) String date,
+                                                           @RequestParam(name = "dateInit", required = false) String dateInit,
+                                                           @RequestParam(name = "dateEnd", required = false) String dateEnd,
                                                            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
                                                            @RequestParam(name = "size",  defaultValue = "10", required = false) int size) throws ParseException {
         Pageable pageRequest = PageRequest.of(page, size);
-        Page<PedidoResponse> pedidoResponseList = this.pedidoService.getPedidos(estatus, date, pageRequest);
+        Page<PedidoResponse> pedidoResponseList = this.pedidoService.getPedidos(estatus, dateInit, dateEnd, pageRequest);
         return new ResponseEntity<>(pedidoResponseList, HttpStatus.OK);
     }
 

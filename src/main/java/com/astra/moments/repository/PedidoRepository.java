@@ -10,7 +10,9 @@ import java.util.Date;
 
 @Repository
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
-    Page<Pedido> findByEstatusAndFechaEntrega(String estatus, Date fechaEntrega, Pageable pageable);
+    Page<Pedido> findByEstatusAndFechaEntregaBetween(String estatus, Date initDate,Date endDate, Pageable pageable);
 
-    Page<Pedido> findByFechaEntrega(Date fechaEntrega, Pageable pageable);
+    Page<Pedido> findByFechaEntregaBetween(Date initDate,Date endDate, Pageable pageable);
+
+    Page<Pedido> findByEstatus(String estatus, Pageable pageable);
 }

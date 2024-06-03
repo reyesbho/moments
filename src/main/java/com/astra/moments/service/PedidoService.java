@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,15 +42,31 @@ public class PedidoService {
         this.productoTipoRepository = productoTipoRepository;
     }
 
-    public Page<PedidoResponse> getPedidos(Optional<String> estatus,String date, Pageable pageable) throws ParseException {
+    public Page<PedidoResponse> getPedidos(Optional<String> estatus,String dateInit, String dateEnd, Pageable pageable) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
-        Date dateFilter = formatter.parse(date);
-        System.out.println(dateFilter);
+        Date dateInitFilter = null;
+        Date dateEndFilter = null;
+        boolean hasFilterDate = true;
+        boolean isSearchAll = estatus.isPresent() && estatus.get().equalsIgnoreCase("ALL");
+        if(StringUtils.hasText(dateInit) && StringUtils.hasText(dateEnd)){
+            dateInitFilter = formatter.parse(dateInit);
+            dateEndFilter = formatter.parse(dateEnd);
+        }else{
+            hasFilterDate = false;
+        }
+
         Page<Pedido> pagePedidos = null;
-        if(estatus.isPresent() && ! estatus.get().equalsIgnoreCase("ALL")){
-            pagePedidos = this.pedidoRepository.findByEstatusAndFechaEntrega(estatus.get(),dateFilter, pageable);
-        }else {
-            pagePedidos = this.pedidoRepository.findByFechaEntrega(dateFilter, pageable);
+        if( isSearchAll && !hasFilterDate){
+            pagePedidos = this.pedidoRepository.findAll(pageable);
+        }
+        if( isSearchAll && hasFilterDate){
+            pagePedidos = this.pedidoRepository.findByFechaEntregaBetween(dateInitFilter, dateEndFilter, pageable);
+        }
+        if(!isSearchAll && hasFilterDate){
+            pagePedidos = this.pedidoRepository.findByEstatusAndFechaEntregaBetween(estatus.get(),dateInitFilter, dateEndFilter, pageable);
+        }
+        if(!isSearchAll && !hasFilterDate){
+            pagePedidos = this.pedidoRepository.findByEstatus(estatus.get(), pageable);
         }
 
         return new PageImpl<>(pagePedidos.getContent().stream().map(MapObject::mapToPedidoResponse).toList(),
