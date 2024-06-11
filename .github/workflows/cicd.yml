@@ -16,7 +16,9 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       - name: Build project
-        run: mvn clean install -DskipTests
+        run: |
+          mvn clean install -DskipTests
+          cp target/*.jar /home/ubuntu/app/app.jar
 
   deploy:
     needs: build
@@ -28,7 +30,5 @@ jobs:
       SECRET_KEY: ${{vars.SECRET_KEY}}
       JWT_EXPIRATION: ${{vars.JWT_EXPIRATION}}
     steps:
-      - name: Copy file jar
-        run: cp target/*.jar /home/ubuntu/app/app.jar
       - name: Run systemctl
         run: sudo systemctl restart app.service
