@@ -22,11 +22,11 @@ jobs:
     needs: build
     runs-on: [aws-ec2]
     env:
-      DATABASE_URL: ${{DATABASE_URL}}
-      DATABASE_USER: ${{DATABASE_USER}}
-      DATABASE_PASSWORD: ${{DATABASE_PASSWORD}}
-      SECRET_KEY: ${{SECRET_KEY}}
-      JWT_EXPIRATION: ${{JWT_EXPIRATION}}
+      DATABASE_URL: ${{vars.DATABASE_URL}}
+      DATABASE_USER: ${{vars.DATABASE_USER}}
+      DATABASE_PASSWORD: ${{vars.DATABASE_PASSWORD}}
+      SECRET_KEY: ${{vars.SECRET_KEY}}
+      JWT_EXPIRATION: ${{vars.JWT_EXPIRATION}}
     steps:
       - name: Copy file jar
         run: cp target/*.jar /home/ubuntu/app/app.jar
