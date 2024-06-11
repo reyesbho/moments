@@ -6,6 +6,8 @@ import com.astra.moments.dto.ProductoPedidoRequest;
 import com.astra.moments.dto.ProductoPedidoResponse;
 import com.astra.moments.exception.EntityNotFoundException;
 import com.astra.moments.service.PedidoService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +25,7 @@ import java.util.Optional;
 @RequestMapping("/api/pedido")
 public class PedidoController {
 
+    private static Logger LOGGER = LoggerFactory.getLogger(PedidoController.class);
     private PedidoService pedidoService;
 
     public PedidoController(PedidoService pedidoService){
@@ -37,6 +40,9 @@ public class PedidoController {
                                                            @RequestParam(name = "size",  defaultValue = "10", required = false) int size) throws ParseException {
         Pageable pageRequest = PageRequest.of(page, size);
         Page<PedidoResponse> pedidoResponseList = this.pedidoService.getPedidos(estatus, dateInit, dateEnd, pageRequest);
+        pedidoResponseList.getContent().stream().forEach((pedido) -> {
+            LOGGER.info(pedido.getHoraEntrega().toString());
+        });
         return new ResponseEntity<>(pedidoResponseList, HttpStatus.OK);
     }
 

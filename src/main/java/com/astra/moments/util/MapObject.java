@@ -3,11 +3,13 @@ package com.astra.moments.util;
 
 import com.astra.moments.dto.*;
 import com.astra.moments.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
 public class MapObject {
-
+    private static Logger LOGGER = LoggerFactory.getLogger(MapObject.class);
 
     public static PedidoResponse mapToPedidoResponse(Pedido pedido){
         return PedidoResponse.builder().
