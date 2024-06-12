@@ -12,7 +12,7 @@ jobs:
         maven: ['3.9.6' ]
     steps:
       - name: Checkout source
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
@@ -38,5 +38,23 @@ jobs:
       SECRET_KEY: ${{vars.SECRET_KEY}}
       JWT_EXPIRATION: ${{vars.JWT_EXPIRATION}}
     steps:
+      - name: Write File
+        uses: DamianReeves/write-file-action@v1.3
+        with:
+          path: /home/ubuntu/app/application.properties
+          contents: |
+            spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQLDialect
+            spring.jpa.hibernate.ddl-auto=none
+            spring.jpa.hibernate.show-sql=true
+            spring.datasource.url=$DATABASE_URL
+            spring.datasource.username=$DATABASE_USER
+            spring.datasource.password=$DATABASE_PASSWORD
+            spring.application.name=sw-service
+            server.servlet.context-path=/moments
+            
+            security.jwt.secret-key=$SECRET_KEY
+            # 1h in millisecond
+            security.jwt.expiration-time=$JWT_EXPIRATION
+          write-mode: overwrite
       - name: Run systemctl
         run: sudo systemctl restart app.service
