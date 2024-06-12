@@ -52,6 +52,6 @@ jobs:
             security.jwt.secret-key=$SECRET_KEY \n
             # 1h in millisecond \n
             security.jwt.expiration-time=$JWT_EXPIRATION \n"
-          echo "MULTI_LINES_TEXT_ENV_VAR<<EOF" >> /home/ubuntu/app/applications.properties
+          echo $MULTI_LINES_TEXT >> /home/ubuntu/app/applications.properties
       - name: Run systemctl
         run: sudo systemctl restart app.service
