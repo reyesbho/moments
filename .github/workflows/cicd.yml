@@ -32,26 +32,19 @@ jobs:
     needs: build
     runs-on: [aws-ec2]
     steps:
-      - name: Set enviroment variables
-        run : |
-          export DATABASE_URL=${{vars.DATABASE_URL}}
-          export DATABASE_USER=${{vars.DATABASE_USER}}
-          export DATABASE_PASSWORD=${{vars.DATABASE_PASSWORD}}
-          export SECRET_KEY=${{vars.SECRET_KEY}}
-          export JWT_EXPIRATION=${{vars.JWT_EXPIRATION}}
       - name: Write File
         run: | 
             rm -f /home/ubuntu/app/application.properties
             echo "spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQLDialect" >> /home/ubuntu/app/application.properties 
             echo "spring.jpa.hibernate.ddl-auto=none" >> /home/ubuntu/app/application.properties 
             echo "spring.jpa.hibernate.show-sql=true" >> /home/ubuntu/app/application.properties 
-            echo "spring.datasource.url=$DATABASE_URL" >> /home/ubuntu/app/application.properties 
-            echo "spring.datasource.username=$DATABASE_USER" >> /home/ubuntu/app/application.properties 
-            echo "spring.datasource.password=$DATABASE_PASSWORD" >> /home/ubuntu/app/application.properties 
+            echo "spring.datasource.url=${{vars.DATABASE_URL}}" >> /home/ubuntu/app/application.properties 
+            echo "spring.datasource.username=${{vars.DATABASE_USER}}" >> /home/ubuntu/app/application.properties 
+            echo "spring.datasource.password=${{vars.DATABASE_PASSWORD}}" >> /home/ubuntu/app/application.properties 
             echo "spring.application.name=sw-service" >> /home/ubuntu/app/application.properties 
             echo "server.servlet.context-path=/moments" >> /home/ubuntu/app/application.properties 
-            echo "security.jwt.secret-key=$SECRET_KEY" >> /home/ubuntu/app/application.properties 
+            echo "security.jwt.secret-key=${{vars.SECRET_KEY}}" >> /home/ubuntu/app/application.properties 
             echo "# 1h in millisecond" >> /home/ubuntu/app/application.properties 
-            echo "security.jwt.expiration-time=$JWT_EXPIRATION" >> /home/ubuntu/app/application.properties
+            echo "security.jwt.expiration-time=${{vars.JWT_EXPIRATION}}" >> /home/ubuntu/app/application.properties
       - name: Run systemctl
         run: sudo systemctl restart app.service
