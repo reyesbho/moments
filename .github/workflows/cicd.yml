@@ -39,11 +39,7 @@ jobs:
       JWT_EXPIRATION: ${{vars.JWT_EXPIRATION}}
     steps:
       - name: Write File
-        uses: DamianReeves/write-file-action@v1.3
-        with:
-          path: /home/ubuntu/app/application.properties
-          contents: |
-            spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQLDialect
+        run: echo "spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQLDialect
             spring.jpa.hibernate.ddl-auto=none
             spring.jpa.hibernate.show-sql=true
             spring.datasource.url=$DATABASE_URL
@@ -54,7 +50,6 @@ jobs:
             
             security.jwt.secret-key=$SECRET_KEY
             # 1h in millisecond
-            security.jwt.expiration-time=$JWT_EXPIRATION
-          write-mode: overwrite
+            security.jwt.expiration-time=$JWT_EXPIRATION" > /home/ubuntu/app/applications.properties
       - name: Run systemctl
         run: sudo systemctl restart app.service
