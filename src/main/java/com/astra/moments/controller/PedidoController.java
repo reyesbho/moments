@@ -40,9 +40,6 @@ public class PedidoController {
                                                            @RequestParam(name = "size",  defaultValue = "10", required = false) int size) throws ParseException {
         Pageable pageRequest = PageRequest.of(page, size);
         Page<PedidoResponse> pedidoResponseList = this.pedidoService.getPedidos(estatus, dateInit, dateEnd, pageRequest);
-        pedidoResponseList.getContent().stream().forEach((pedido) -> {
-            LOGGER.info(pedido.getHoraEntrega().toString());
-        });
         return new ResponseEntity<>(pedidoResponseList, HttpStatus.OK);
     }
 
