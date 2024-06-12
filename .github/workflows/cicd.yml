@@ -24,9 +24,9 @@ jobs:
           java-version: 17
           maven-version: ${{ matrix.maven }}
       - name: Build project
-        run: |
-          mvn clean package -DskipTests
-          cp target/*.jar /home/ubuntu/app/app.jar
+        run: mvn clean package -DskipTests
+      - name: Copy Jar File
+        run: cp target/*.jar /home/ubuntu/app/app.jar
 
   deploy:
     needs: build
