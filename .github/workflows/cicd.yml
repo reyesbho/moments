@@ -7,6 +7,9 @@ on:
 jobs:
   build:
     runs-on: [aws-ec2]
+    strategy:
+      matrix:
+        maven: [ '3.8.8', '3.9.6' ]
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
@@ -15,6 +18,11 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+      - name: Setup Maven ${{ matrix.maven }} Action
+        uses: s4u/setup-maven-action@< version >
+        with:
+          java-version: 8
+          maven-version: ${{ matrix.maven }}
       - name: Build project
         run: |
           mvn clean install -DskipTests
