@@ -39,17 +39,19 @@ jobs:
       JWT_EXPIRATION: ${{vars.JWT_EXPIRATION}}
     steps:
       - name: Write File
-        run: echo "spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQLDialect
-            spring.jpa.hibernate.ddl-auto=none
-            spring.jpa.hibernate.show-sql=true
-            spring.datasource.url=$DATABASE_URL
-            spring.datasource.username=$DATABASE_USER
-            spring.datasource.password=$DATABASE_PASSWORD
-            spring.application.name=sw-service
-            server.servlet.context-path=/moments
-            
-            security.jwt.secret-key=$SECRET_KEY
-            # 1h in millisecond
-            security.jwt.expiration-time=$JWT_EXPIRATION" > /home/ubuntu/app/applications.properties
+        run: | 
+          MULTI_LINES_TEXT = "spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQLDialect \n
+            spring.jpa.hibernate.ddl-auto=none \n
+            spring.jpa.hibernate.show-sql=true \n
+            spring.datasource.url=$DATABASE_URL \n
+            spring.datasource.username=$DATABASE_USER \n
+            spring.datasource.password=$DATABASE_PASSWORD \n
+            spring.application.name=sw-service \n
+            server.servlet.context-path=/moments \n
+            \n
+            security.jwt.secret-key=$SECRET_KEY \n
+            # 1h in millisecond \n
+            security.jwt.expiration-time=$JWT_EXPIRATION \n"
+          echo "MULTI_LINES_TEXT_ENV_VAR<<EOF" >> /home/ubuntu/app/applications.properties
       - name: Run systemctl
         run: sudo systemctl restart app.service
