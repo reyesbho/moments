@@ -50,9 +50,8 @@ jobs:
             echo "spring.datasource.password=$DATABASE_PASSWORD" >> /home/ubuntu/app/application.properties 
             echo "spring.application.name=sw-service" >> /home/ubuntu/app/application.properties 
             echo "server.servlet.context-path=/moments" >> /home/ubuntu/app/application.properties 
-            echo "
             echo "security.jwt.secret-key=$SECRET_KEY" >> /home/ubuntu/app/application.properties 
             echo "# 1h in millisecond" >> /home/ubuntu/app/application.properties 
-            echo "security.jwt.expiration-time=$JWT_EXPIRATION" >> /home/ubuntu/app/application.properties 
+            echo "security.jwt.expiration-time=$JWT_EXPIRATION" >> /home/ubuntu/app/application.properties
       - name: Run systemctl
         run: sudo systemctl restart app.service
