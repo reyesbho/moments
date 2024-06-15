@@ -1,0 +1,52 @@
+name: CICD-moments
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: [aws-ec2]
+    strategy:
+      matrix:
+        maven: ['3.9.6' ]
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Setup Maven ${{ matrix.maven }} Action
+        uses: s4u/setup-maven-action@v1.13.0
+        with:
+          java-version: 17
+          maven-version: ${{ matrix.maven }}
+      - name: Build project
+        run: mvn clean package -DskipTests
+      - name: Copy Jar File
+        run: cp target/*.jar /home/ubuntu/app/app.jar
+
+  deploy:
+    needs: build
+    runs-on: [aws-ec2]
+    steps:
+      - name: Write File
+        run: | 
+            rm -f /home/ubuntu/app/application.properties
+            echo "spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQLDialect" >> /home/ubuntu/app/application.properties 
+            echo "spring.jpa.hibernate.ddl-auto=none" >> /home/ubuntu/app/application.properties 
+            echo "spring.jpa.hibernate.show-sql=true" >> /home/ubuntu/app/application.properties 
+            echo "spring.datasource.url=${{vars.DATABASE_URL}}" >> /home/ubuntu/app/application.properties 
+            echo "spring.datasource.username=${{vars.DATABASE_USER}}" >> /home/ubuntu/app/application.properties 
+            echo "spring.datasource.password=${{vars.DATABASE_PASSWORD}}" >> /home/ubuntu/app/application.properties 
+            echo "spring.application.name=sw-service" >> /home/ubuntu/app/application.properties 
+            echo "server.servlet.context-path=/moments" >> /home/ubuntu/app/application.properties 
+            echo "security.jwt.secret-key=${{vars.SECRET_KEY}}" >> /home/ubuntu/app/application.properties 
+            echo "# 1h in millisecond" >> /home/ubuntu/app/application.properties 
+            echo "security.jwt.expiration-time=${{vars.JWT_EXPIRATION}}" >> /home/ubuntu/app/application.properties
+      - name: Run systemctl
+        run: sudo systemctl restart app.service
