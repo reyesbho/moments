@@ -3,6 +3,7 @@ package com.astra.moments.service;
 import com.astra.moments.dto.SaborResponse;
 import com.astra.moments.model.Sabor;
 import com.astra.moments.repository.SaborRepository;
+import com.astra.moments.util.MapObject;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,14 +20,8 @@ public class SaborService {
 
     public List<SaborResponse> getSabores(){
         List<Sabor> saborList = this.saborRepository.findAll();
-        return  saborList.stream().map(this::mapToSaborResponse).collect(Collectors.toList());
+        return  saborList.stream().map(MapObject::mapToSaborResponse).collect(Collectors.toList());
     }
 
-    private SaborResponse mapToSaborResponse(Sabor sabor){
-        return SaborResponse.builder().id(sabor.getId())
-                .clave(sabor.getClave())
-                .descripcion(sabor.getDescripcion())
-                .estatus(sabor.getEstatus())
-                .build();
-    }
+
 }

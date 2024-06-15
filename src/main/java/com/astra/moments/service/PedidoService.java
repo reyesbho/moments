@@ -1,9 +1,6 @@
 package com.astra.moments.service;
 
-import com.astra.moments.dto.PedidoRequest;
-import com.astra.moments.dto.PedidoResponse;
-import com.astra.moments.dto.ProductoPedidoRequest;
-import com.astra.moments.dto.ProductoPedidoResponse;
+import com.astra.moments.dto.*;
 import com.astra.moments.exception.EntityNotFoundException;
 import com.astra.moments.model.*;
 import com.astra.moments.repository.*;
@@ -86,7 +83,7 @@ public class PedidoService {
 
 
     @Transactional
-    public void updateStatePedido(Long idPedido, String status) throws EntityNotFoundException {
+    public PedidoResponse updateStatePedido(Long idPedido, String status) throws EntityNotFoundException {
         //validar que exista el pedido
         Optional<Pedido> pedidoOptional = this.pedidoRepository.findById(idPedido);
         if (pedidoOptional.isEmpty()){
@@ -97,13 +94,12 @@ public class PedidoService {
         pedidoEntity.setEstatus(EstatusEnum.getStatusEnum(status).getValue());
         pedidoEntity.setFechaActualizacion(new Date());
 
-        this.pedidoRepository.save(pedidoEntity);
+        Pedido pedido =  this.pedidoRepository.save(pedidoEntity);
+        return MapObject.mapToPedidoResponse(pedido);
     }
 
     @Transactional
-    public PedidoResponse addPedido(PedidoRequest newPedido) throws EntityNotFoundException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
+    public PedidoResponse addPedido(PedidoRequest newPedido, User currentUser) throws EntityNotFoundException {
         //validar el cliente
         Cliente cliente = null;
         if (Objects.isNull(newPedido.getCliente().getId()) || newPedido.getCliente().getId() == 0){
@@ -113,7 +109,7 @@ public class PedidoService {
                     .apellidoMaterno(newPedido.getCliente().getApellidoMaterno())
                     .direccion(newPedido.getCliente().getDireccion())
                     .build();
-            this.clienteRepository.saveAndFlush(cliente);
+            this.clienteRepository.save(cliente);
         }else{
             Optional<Cliente> clienteOptional = this.clienteRepository.findById(newPedido.getCliente().getId());
             cliente = clienteOptional.get();
@@ -131,14 +127,14 @@ public class PedidoService {
                 .registradoPor(currentUser.getUsername())
                 .numProductos(0)
                 .build();
-        this.pedidoRepository.saveAndFlush(pedidoEntity);
+        this.pedidoRepository.save(pedidoEntity);
 
         return MapObject.mapToPedidoResponse(pedidoEntity);
     }
 
 
     @Transactional
-    public void addProductoToPedido(Long idPedido, ProductoPedidoRequest productoDto){
+    public ProductoPedidoResponse addProductoToPedido(Long idPedido, ProductoPedidoRequest productoDto){
         Optional<Pedido> optionalPedido = this.pedidoRepository.findById(idPedido);
         if (optionalPedido.isPresent()){
             Pedido pedidoEntity=optionalPedido.get();
@@ -151,6 +147,9 @@ public class PedidoService {
             Float totalProducto = productoDto.getPrecio() * (productoEntity.isCobroUnidad() ? 1f : productoDto.getPorciones());
             Float total = pedidoEntity.getTotal() + totalProducto;
             pedidoEntity.setTotal(total);
+
+            Integer numProducts = pedidoEntity.getNumProductos() + 1 ;
+            pedidoEntity.setNumProductos(numProducts);
 
             ProductoTipo productoTipoEntity = this.productoTipoRepository.findById(productoDto.getIdTipoProducto()).orElse(new ProductoTipo(productoDto.getIdTipoProducto()));
             ProductoPedido producto=ProductoPedido.builder()
@@ -165,9 +164,12 @@ public class PedidoService {
                     .size(productoDto.getPorciones())
                     .precio(productoDto.getPrecio())
                     .build();
-            this.pedidoProductoRepository.save(producto);
+            ProductoPedido productoSaved = this.pedidoProductoRepository.save(producto);
             this.pedidoRepository.save(pedidoEntity);
+
+            return MapObject.mapToPedidoProductoResponse(productoSaved);
         }
+        return  null;
     }
 
 }
