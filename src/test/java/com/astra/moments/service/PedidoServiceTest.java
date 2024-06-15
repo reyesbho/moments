@@ -173,7 +173,7 @@ public class PedidoServiceTest {
                 .build();
 
         User user = User.builder()
-                .id(1l).user("Reyes").email("reyes@gmail.com").fullName("Reyes Bustamante").password("algo")
+                .id(1l).user("Reyes").email("reyes@gmail.com").fullName("Reyes Bustamante")
                 .build();
                 
         PedidoResponse pedido = pedidoService.addPedido(pedidoRequest, user);
