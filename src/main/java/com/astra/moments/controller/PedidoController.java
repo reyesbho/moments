@@ -5,6 +5,7 @@ import com.astra.moments.dto.PedidoResponse;
 import com.astra.moments.dto.ProductoPedidoRequest;
 import com.astra.moments.dto.ProductoPedidoResponse;
 import com.astra.moments.exception.EntityNotFoundException;
+import com.astra.moments.model.User;
 import com.astra.moments.service.PedidoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -63,7 +66,9 @@ public class PedidoController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<PedidoResponse> addPedido(@RequestBody PedidoRequest pedidoRequest){
-        return  new ResponseEntity<>(this.pedidoService.addPedido(pedidoRequest), HttpStatus.CREATED);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = (User) authentication.getPrincipal();
+        return  new ResponseEntity<>(this.pedidoService.addPedido(pedidoRequest, currentUser), HttpStatus.CREATED);
     }
 
     @PostMapping("/{idPedido}/producto")

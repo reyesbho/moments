@@ -6,6 +6,7 @@ import com.astra.moments.model.Producto;
 import com.astra.moments.model.ProductoTipo;
 import com.astra.moments.repository.ProductoRepository;
 import com.astra.moments.repository.ProductoTipoRepository;
+import com.astra.moments.util.MapObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -36,28 +37,19 @@ public class ProductoService {
             productosPage = this.productoRepository.findAll(pageRequest);
         }
         List<Producto> productos = productosPage.getContent();
-        productoResponse = new PageImpl<>(productos.stream().map(this::mapToProductResponse).collect(Collectors.toList()),pageRequest,productosPage.getTotalElements());
+        productoResponse = new PageImpl<>(productos.stream().map(MapObject::mapToProductResponse).collect(Collectors.toList()),pageRequest,productosPage.getTotalElements());
         return productoResponse;
     }
 
     public ProductoResponse getProducto(Long id){
         Optional<Producto> optionalProducto = this.productoRepository.findById(id);
-        return optionalProducto.map(this::mapToProductResponse).orElse(null);
+        return optionalProducto.map(MapObject::mapToProductResponse).orElse(null);
     }
 
     public List<ProductoTipoResponse> getProductTipo(Long id){
         List<ProductoTipo> productoTipoList = this.productoTipoRepository.findByIdProducto(id);
-        return productoTipoList.stream().map(this::mapToProductoTipoResponse).collect(Collectors.toList());
+        return productoTipoList.stream().map(MapObject::mapToProductoTipoResponse).collect(Collectors.toList());
     }
 
-    private ProductoResponse mapToProductResponse(Producto producto){
-        return ProductoResponse.builder().id(producto.getId()).clave(producto.getClave()).estatus(producto.getEstatus()).descripcion(producto.getDescripcion())
-                .imagen(producto.getImagen()).build();
-    }
-
-    private ProductoTipoResponse mapToProductoTipoResponse(ProductoTipo productoTipo){
-        return ProductoTipoResponse.builder().id(productoTipo.getId()).clave(productoTipo.getClave()).descripcion(productoTipo.getDescripcion())
-                .estatus(productoTipo.getEstatus()).build();
-    }
 
 }
