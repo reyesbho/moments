@@ -9,8 +9,6 @@ import com.astra.moments.util.MapObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -22,17 +20,17 @@ import java.util.*;
 @Service
 public class PedidoService {
     private PedidoRepository pedidoRepository;
-    private PedidoProductoRepository pedidoProductoRepository;
+    private ProductoPedidoRepository productoPedidoRepository;
     private ClienteRepository clienteRepository;
     private SaborRepository saborRepository;
     private ProductoTipoRepository productoTipoRepository;
     private ProductoRepository productoRepository;
 
-    public PedidoService(PedidoRepository pedidoRepository,PedidoProductoRepository pedidoProductoRepository,
+    public PedidoService(PedidoRepository pedidoRepository, ProductoPedidoRepository productoPedidoRepository,
                          ClienteRepository clienteRepository, SaborRepository saborRepository,
                          ProductoTipoRepository productoTipoRepository, ProductoRepository productoRepository){
         this.pedidoRepository = pedidoRepository;
-        this.pedidoProductoRepository = pedidoProductoRepository;
+        this.productoPedidoRepository = productoPedidoRepository;
         this.clienteRepository = clienteRepository;
         this.saborRepository = saborRepository;
         this.productoRepository = productoRepository;
@@ -77,7 +75,7 @@ public class PedidoService {
 
 
     public List<ProductoPedidoResponse> getProductosByPedido(Long idPedido){
-        List<ProductoPedido> productos = this.pedidoProductoRepository.findByIdPedido(idPedido);
+        List<ProductoPedido> productos = this.productoPedidoRepository.findByIdPedido(idPedido);
         return productos.stream().map(MapObject::mapToPedidoProductoResponse).toList();
     }
 
@@ -164,7 +162,7 @@ public class PedidoService {
                     .size(productoDto.getPorciones())
                     .precio(productoDto.getPrecio())
                     .build();
-            ProductoPedido productoSaved = this.pedidoProductoRepository.save(producto);
+            ProductoPedido productoSaved = this.productoPedidoRepository.save(producto);
             this.pedidoRepository.save(pedidoEntity);
 
             return MapObject.mapToPedidoProductoResponse(productoSaved);
@@ -172,4 +170,28 @@ public class PedidoService {
         return  null;
     }
 
+    @Transactional
+    public void deleteProductoPedido(Long idProductoPedido){
+        Optional<ProductoPedido> optionalProductoPedido = this.productoPedidoRepository.findById(idProductoPedido);
+        if (optionalProductoPedido.isPresent()){
+            ProductoPedido productoPedido = optionalProductoPedido.get();
+            this.productoPedidoRepository.delete(productoPedido);
+        }
+    }
+
+    @Transactional
+    public void deletePedido(Long idPedido){
+        //validate pedido
+        Optional<Pedido> optionalPedido = this.pedidoRepository.findById(idPedido);
+        if (optionalPedido.isEmpty()) {
+            return;
+        }
+        Pedido pedido = optionalPedido.get();
+        //seach all products by pedido
+        List<ProductoPedido> productos = this.productoPedidoRepository.findByIdPedido(pedido.getId());
+        //delete all productoPedido
+        this.productoPedidoRepository.deleteAll(productos);
+        //delete pedido
+        this.pedidoRepository.delete(pedido);
+    }
 }

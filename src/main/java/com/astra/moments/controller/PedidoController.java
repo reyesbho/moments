@@ -75,4 +75,14 @@ public class PedidoController {
     public void addProductToPedido(@PathVariable("idPedido") Long id, @RequestBody ProductoPedidoRequest producto){
         this.pedidoService.addProductoToPedido(id, producto);
     }
+
+    @DeleteMapping("/{idPedido}")
+    public void deletePedido(@PathVariable("idPedido") Long id){
+        this.pedidoService.deletePedido(id);
+    }
+
+    @DeleteMapping("/{idPedido}/producto/{idProductoPedido}")
+    public void deleteProductoPedido(@PathVariable("idPedido") Long idPedido, @PathVariable("idProductoPedido") Long idProductoPedido){
+        this.pedidoService.deleteProductoPedido(idProductoPedido);
+    }
 }
