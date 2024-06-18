@@ -17,9 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
 
-import java.text.DateFormat;
+import javax.swing.text.html.Option;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
@@ -31,7 +30,7 @@ public class PedidoServiceTest {
     @Mock
     private PedidoRepository pedidoRepository;
     @Mock
-    private PedidoProductoRepository pedidoProductoRepository;
+    private ProductoPedidoRepository productoPedidoRepository;
     @Mock
     private ClienteRepository clienteRepository;
     @Mock
@@ -145,7 +144,7 @@ public class PedidoServiceTest {
     @Test
     @DisplayName("PedidoService_getProductosByPedidoId_ReturnListProductoPedidoResponse")
     void getProductosByPedido(){
-        Mockito.when(pedidoProductoRepository.findByIdPedido(Mockito.anyLong()))
+        Mockito.when(productoPedidoRepository.findByIdPedido(Mockito.anyLong()))
                 .thenReturn(Mockito.mock(List.class));
 
         List<ProductoPedidoResponse> productos = pedidoService.getProductosByPedido(2l);
@@ -215,7 +214,7 @@ public class PedidoServiceTest {
 
         Mockito.when(productoTipoRepository.findById(Mockito.anyLong()))
                 .thenReturn(Optional.of(productoTipoModel));
-        Mockito.when(pedidoProductoRepository.save(Mockito.any(ProductoPedido.class)))
+        Mockito.when(productoPedidoRepository.save(Mockito.any(ProductoPedido.class)))
                 .thenReturn(productoPedidoModel);
         Mockito.when(pedidoRepository.save(Mockito.any(Pedido.class)))
                 .thenReturn(pedido1);
@@ -228,5 +227,38 @@ public class PedidoServiceTest {
         Assertions.assertNotNull(productoPedido);
         Assertions.assertNull(productoPedido.getSabor().getId());
         Assertions.assertEquals("hawaiana", productoPedido.getTipoProducto().getClave());
+    }
+
+    @Test
+    @DisplayName("PedidoService_deleteProductoPedido_NoReturn")
+    void deleteProductoPedido() {
+        ProductoPedido productoPedido = ProductoPedido.builder()
+                        .id(1l).idPedido(1l).producto(Producto.builder().id(1l).build())
+                        .sabor(Sabor.builder().id(1l).build()).tipoProducto(ProductoTipo.builder().id(1l).build())
+                        .texto("Felicidades").comentarios(null).fechaRegistro(new Date())
+                        .fechaActualizacion(new Date()).size(15).precio(200).build();
+
+        Mockito.when(productoPedidoRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(productoPedido));
+
+        Assertions.assertAll(() -> pedidoService.deleteProductoPedido(1l));
+
+    }
+
+    @Test
+    @DisplayName("PedidoService_deletePedido_NoReturn")
+    void deletePedido(){
+        ProductoPedido productoPedido = ProductoPedido.builder()
+                .id(1l).idPedido(1l).producto(Producto.builder().id(1l).build())
+                .sabor(Sabor.builder().id(1l).build()).tipoProducto(ProductoTipo.builder().id(1l).build())
+                .texto("Felicidades").comentarios(null).fechaRegistro(new Date())
+                .fechaActualizacion(new Date()).size(15).precio(200).build();
+
+        Mockito.when(productoPedidoRepository.findByIdPedido(Mockito.anyLong()))
+                .thenReturn(Arrays.asList(productoPedido));
+        Mockito.when(pedidoRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(pedido1));
+
+        Assertions.assertAll(() -> pedidoService.deletePedido(1l));
     }
 }
