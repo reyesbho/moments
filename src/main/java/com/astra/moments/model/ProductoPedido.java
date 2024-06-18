@@ -23,15 +23,15 @@ public class ProductoPedido {
     @Column(name = "id_pedido", nullable = false)
     private Long idPedido;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_producto", referencedColumnName = "id_producto")
     private Producto producto;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_sabor", referencedColumnName = "id_sabor")
     private Sabor sabor;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_tipo_producto", referencedColumnName = "id_tipo_producto")
     private ProductoTipo tipoProducto;
 

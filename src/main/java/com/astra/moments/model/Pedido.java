@@ -40,7 +40,7 @@ public class Pedido {
     @Column(name = "registrado_por")
     private String registradoPor;
 
-    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @OneToOne( fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cliente", referencedColumnName = "id_cliente")
     private Cliente cliente;
 
