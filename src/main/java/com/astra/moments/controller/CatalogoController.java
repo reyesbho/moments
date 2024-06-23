@@ -1,7 +1,7 @@
 package com.astra.moments.controller;
 
-import com.astra.moments.dto.ClienteResponse;
-import com.astra.moments.dto.SaborResponse;
+import com.astra.moments.dto.*;
+import com.astra.moments.service.CatalogoService;
 import com.astra.moments.service.ClienteService;
 import com.astra.moments.service.SaborService;
 import org.springframework.http.HttpStatus;
@@ -16,12 +16,12 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/catalogo")
-public class CatalogController {
+public class CatalogoController {
 
-    private SaborService catalogService;
+    private CatalogoService catalogService;
     private ClienteService clienteService;
 
-    public CatalogController(SaborService catalogService, ClienteService clienteService){
+    public CatalogoController(CatalogoService catalogService, ClienteService clienteService){
         this.catalogService = catalogService;
         this.clienteService = clienteService;
     }
@@ -29,6 +29,24 @@ public class CatalogController {
     @GetMapping("/sabor")
     public ResponseEntity getSabores(){
         List<SaborResponse> saborResponseList = this.catalogService.getSabores();
+        return  new ResponseEntity(saborResponseList, HttpStatus.OK);
+    }
+
+    @GetMapping("/size")
+    public ResponseEntity getTamanos(){
+        List<TamanoProductoResponse> saborResponseList = this.catalogService.getTamanos();
+        return  new ResponseEntity(saborResponseList, HttpStatus.OK);
+    }
+
+    @GetMapping("/tipoCobro")
+    public ResponseEntity getTipoCobros(){
+        List<TipoCobroResponse> saborResponseList = this.catalogService.getTipoCobros();
+        return  new ResponseEntity(saborResponseList, HttpStatus.OK);
+    }
+
+    @GetMapping("/tipoProducto")
+    public ResponseEntity getTipoProductos(){
+        List<TipoProductoResponse> saborResponseList = this.catalogService.getTipoProducto();
         return  new ResponseEntity(saborResponseList, HttpStatus.OK);
     }
 
