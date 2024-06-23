@@ -42,25 +42,19 @@ public class MapObject {
         return ProductoPedidoResponse.builder()
                 .id(pedidoProducto.getId())
                 .idPedido(pedidoProducto.getIdPedido())
-                .producto(mapToProductResponse(pedidoProducto.getProducto()))
-                .sabor(mapToSaborResponse(pedidoProducto.getSabor()))
-                .tipoProducto(mapToProductoTipoResponse(pedidoProducto.getTipoProducto()))
-                .texto(pedidoProducto.getTexto())
                 .comentarios(pedidoProducto.getComentarios())
                 .fechaRegistro(pedidoProducto.getFechaRegistro())
                 .fechaActualizacion(pedidoProducto.getFechaActualizacion())
-                .porciones(pedidoProducto.getSize())
-                .precio(pedidoProducto.getPrecio())
                 .build();
     }
 
 
-    public static ProductoTipoResponse mapToProductoTipoResponse(ProductoTipo productoTipo){
+    public static ProductoTipoResponse mapToProductoTipoResponse(TipoProducto tipoProducto){
         return ProductoTipoResponse.builder()
-                .id(productoTipo.getIdProducto())
-                .clave(productoTipo.getClave())
-                .descripcion(productoTipo.getDescripcion())
-                .estatus(productoTipo.getEstatus())
+                .id(tipoProducto.getId())
+                .clave(tipoProducto.getClave())
+                .descripcion(tipoProducto.getDescripcion())
+                .estatus(tipoProducto.getEstatus())
                 .build();
     }
 
@@ -82,7 +76,6 @@ public class MapObject {
                 .estatus(producto.getEstatus())
                 .descripcion(producto.getDescripcion())
                 .imagen(producto.getImagen())
-                .cobroUnidad(producto.isCobroUnidad())
                 .build();
     }
 

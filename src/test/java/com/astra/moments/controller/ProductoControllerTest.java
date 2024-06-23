@@ -1,23 +1,14 @@
 package com.astra.moments.controller;
 
 import com.astra.moments.config.JwtService;
-import com.astra.moments.dto.LoginUserDto;
 import com.astra.moments.dto.ProductoResponse;
 import com.astra.moments.dto.ProductoTipoResponse;
-import com.astra.moments.model.Producto;
-import com.astra.moments.model.ProductoTipo;
-import com.astra.moments.model.User;
-import com.astra.moments.service.AuthenticationService;
 import com.astra.moments.service.ProductoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.CoreMatchers;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
-import org.mockito.BDDMockito;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
@@ -31,7 +22,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -40,8 +30,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @WebMvcTest( controllers = ProductoController.class)
 @AutoConfigureMockMvc(addFilters = false)

@@ -3,9 +3,9 @@ package com.astra.moments.service;
 import com.astra.moments.dto.ProductoResponse;
 import com.astra.moments.dto.ProductoTipoResponse;
 import com.astra.moments.model.Producto;
-import com.astra.moments.model.ProductoTipo;
+import com.astra.moments.model.TipoProducto;
 import com.astra.moments.repository.ProductoRepository;
-import com.astra.moments.repository.ProductoTipoRepository;
+import com.astra.moments.repository.TipoProductoRepository;
 import com.astra.moments.util.MapObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -20,11 +20,11 @@ import java.util.stream.Collectors;
 public class ProductoService {
 
     private ProductoRepository productoRepository;
-    private ProductoTipoRepository productoTipoRepository;
+    private TipoProductoRepository tipoProductoRepository;
 
-    public ProductoService(ProductoRepository productoRepository, ProductoTipoRepository productoTipoRepository){
+    public ProductoService(ProductoRepository productoRepository, TipoProductoRepository tipoProductoRepository){
         this.productoRepository = productoRepository;
-        this.productoTipoRepository = productoTipoRepository;
+        this.tipoProductoRepository = tipoProductoRepository;
     }
 
     public Page<ProductoResponse> getProductos(Optional<String> estatus, Pageable pageRequest){
@@ -47,8 +47,8 @@ public class ProductoService {
     }
 
     public List<ProductoTipoResponse> getProductTipo(Long id){
-        List<ProductoTipo> productoTipoList = this.productoTipoRepository.findByIdProducto(id);
-        return productoTipoList.stream().map(MapObject::mapToProductoTipoResponse).collect(Collectors.toList());
+        List<TipoProducto> tipoProductoList = this.tipoProductoRepository.findByIdProducto(id);
+        return tipoProductoList.stream().map(MapObject::mapToProductoTipoResponse).collect(Collectors.toList());
     }
 
 

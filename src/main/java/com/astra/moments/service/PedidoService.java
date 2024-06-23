@@ -23,18 +23,18 @@ public class PedidoService {
     private ProductoPedidoRepository productoPedidoRepository;
     private ClienteRepository clienteRepository;
     private SaborRepository saborRepository;
-    private ProductoTipoRepository productoTipoRepository;
+    private TipoProductoRepository tipoProductoRepository;
     private ProductoRepository productoRepository;
 
     public PedidoService(PedidoRepository pedidoRepository, ProductoPedidoRepository productoPedidoRepository,
                          ClienteRepository clienteRepository, SaborRepository saborRepository,
-                         ProductoTipoRepository productoTipoRepository, ProductoRepository productoRepository){
+                         TipoProductoRepository tipoProductoRepository, ProductoRepository productoRepository){
         this.pedidoRepository = pedidoRepository;
         this.productoPedidoRepository = productoPedidoRepository;
         this.clienteRepository = clienteRepository;
         this.saborRepository = saborRepository;
         this.productoRepository = productoRepository;
-        this.productoTipoRepository = productoTipoRepository;
+        this.tipoProductoRepository = tipoProductoRepository;
     }
 
     public Page<PedidoResponse> getPedidos(Optional<String> estatus,String dateInit, String dateEnd, Pageable pageable) throws ParseException {
@@ -134,9 +134,9 @@ public class PedidoService {
     @Transactional
     public ProductoPedidoResponse addProductoToPedido(Long idPedido, ProductoPedidoRequest productoDto){
         Optional<Pedido> optionalPedido = this.pedidoRepository.findById(idPedido);
-        if (optionalPedido.isPresent()){
+        /*if (optionalPedido.isPresent()){
             Pedido pedidoEntity=optionalPedido.get();
-            Producto productoEntity = this.productoRepository.findById(productoDto.getIdProducto()).orElse(new Producto(productoDto.getIdProducto()));
+            Producto productoEntity = this.productoRepository.findById(productoDto.getIdDetalleProducto()).orElse(new Producto(productoDto.getIdDetalleProducto()));
             Sabor saborEntity = null;
             if(Objects.nonNull(productoDto.getIdSabor())){
                 saborEntity = this.saborRepository.findById(productoDto.getIdSabor()).orElse(null);
@@ -149,12 +149,12 @@ public class PedidoService {
             Integer numProducts = pedidoEntity.getNumProductos() + 1 ;
             pedidoEntity.setNumProductos(numProducts);
 
-            ProductoTipo productoTipoEntity = this.productoTipoRepository.findById(productoDto.getIdTipoProducto()).orElse(new ProductoTipo(productoDto.getIdTipoProducto()));
+            TipoProducto tipoProductoEntity = this.tipoProductoRepository.findById(productoDto.getIdTipoProducto()).orElse(new TipoProducto(productoDto.getIdTipoProducto()));
             ProductoPedido producto=ProductoPedido.builder()
                     .idPedido(pedidoEntity.getId())
                     .producto(productoEntity)
                     .sabor(saborEntity)
-                    .tipoProducto(productoTipoEntity)
+                    .tipoProducto(tipoProductoEntity)
                     .texto(productoDto.getTexto())
                     .comentarios(productoDto.getComentarios())
                     .fechaRegistro(new Date())
@@ -166,7 +166,7 @@ public class PedidoService {
             this.pedidoRepository.save(pedidoEntity);
 
             return MapObject.mapToPedidoProductoResponse(productoSaved);
-        }
+        }*/
         return  null;
     }
 

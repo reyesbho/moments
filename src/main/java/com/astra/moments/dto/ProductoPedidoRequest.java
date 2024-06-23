@@ -12,11 +12,6 @@ import lombok.NoArgsConstructor;
 public class ProductoPedidoRequest {
 
 
-    private Long idProducto;
-    private Long idSabor;
-    private Long idTipoProducto;
-    private String texto;
+    private Long idDetalleProducto;
     private String comentarios;
-    private Integer porciones;
-    private Integer precio;
 }

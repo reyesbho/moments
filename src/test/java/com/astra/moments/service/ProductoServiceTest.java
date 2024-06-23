@@ -3,9 +3,9 @@ package com.astra.moments.service;
 import com.astra.moments.dto.ProductoResponse;
 import com.astra.moments.dto.ProductoTipoResponse;
 import com.astra.moments.model.Producto;
-import com.astra.moments.model.ProductoTipo;
+import com.astra.moments.model.TipoProducto;
 import com.astra.moments.repository.ProductoRepository;
-import com.astra.moments.repository.ProductoTipoRepository;
+import com.astra.moments.repository.TipoProductoRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -13,9 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import org.mockito.internal.MockedStaticImpl;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
 
@@ -23,24 +21,22 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @ExtendWith(MockitoExtension.class)
 class ProductoServiceTest {
 
     @Mock
     private ProductoRepository productoRepository;
     @Mock
-    private ProductoTipoRepository productoTipoRepository;
+    private TipoProductoRepository tipoProductoRepository;
     @InjectMocks
     private ProductoService productoService;
     static Producto producto;
     static Producto producto2;
     static Producto producto3;
 
-    static ProductoTipo productoTipo;
-    static ProductoTipo productoTipo2;
-    static ProductoTipo productoTipo3;
+    static TipoProducto tipoProducto;
+    static TipoProducto tipoProducto2;
+    static TipoProducto tipoProducto3;
 
     @BeforeAll
     public static void setUp() {
@@ -70,21 +66,21 @@ class ProductoServiceTest {
                 .cobroUnidad(false)
                 .build();
 
-        productoTipo = ProductoTipo.builder()
+        tipoProducto = TipoProducto.builder()
                 .id(1l)
                 .clave("hawaiana")
                 .descripcion("Hawayana")
                 .estatus("ACTIVO")
                 .idProducto(2l).build();
 
-        productoTipo2 = ProductoTipo.builder()
+        tipoProducto2 = TipoProducto.builder()
                 .id(2l)
                 .clave("peperoni")
                 .descripcion("Peperoni")
                 .estatus("ACTIVO")
                 .idProducto(2l).build();
 
-        productoTipo3 = ProductoTipo.builder()
+        tipoProducto3 = TipoProducto.builder()
                 .id(3l)
                 .clave("mexicana")
                 .descripcion("Mexicana")
@@ -135,8 +131,8 @@ class ProductoServiceTest {
     @Test
     @DisplayName("ProductoService_getTiposByProductoId_ReturnListProductoTipoResponse")
     void getProductoTipo(){
-        Mockito.when(productoTipoRepository.findByIdProducto(Mockito.anyLong()))
-                .thenReturn(Arrays.asList(productoTipo, productoTipo2, productoTipo3));
+        Mockito.when(tipoProductoRepository.findByIdProducto(Mockito.anyLong()))
+                .thenReturn(Arrays.asList(tipoProducto, tipoProducto2, tipoProducto3));
 
         List<ProductoTipoResponse> tipos = productoService.getProductTipo(2l);
         Assertions.assertEquals(3, tipos.size());

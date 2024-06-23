@@ -6,29 +6,29 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Entity
+@Table(name = "cat_tipo_producto")
 @Data
 @Builder
-@Entity
-@AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "cat_producto", schema = "public")
-public class Producto {
-
-
+@AllArgsConstructor
+public class TipoProducto {
     @Id
-    @Column(name = "id_producto")
+    @Column(name = "id_tipo_producto")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "clave", nullable = false)
-    private String clave;
-    @Column(name = "descripcion" , nullable = false)
-    private String descripcion;
-    @Column(name = "estatus" , nullable = false)
-    private String estatus;
-    @Column(name = "imagen" , nullable = false)
-    private String imagen;
 
-    public Producto(Long idProducto){
+    @Column(name = "clave")
+    private String clave;
+
+    @Column(name = "descripcion")
+    private String descripcion;
+
+    @Column(name = "estatus")
+    private String estatus;
+
+
+    public TipoProducto(Long idProducto){
         this.id = idProducto;
     }
 }

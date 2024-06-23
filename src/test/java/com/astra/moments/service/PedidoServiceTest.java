@@ -18,7 +18,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import javax.swing.text.html.Option;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
@@ -36,7 +35,7 @@ public class PedidoServiceTest {
     @Mock
     private SaborRepository saborRepository;
     @Mock
-    private ProductoTipoRepository productoTipoRepository;
+    private TipoProductoRepository tipoProductoRepository;
     @Mock
     private ProductoRepository productoRepository;
     @InjectMocks
@@ -200,10 +199,10 @@ public class PedidoServiceTest {
         Producto productoModel = Producto.builder()
                         .id(1l).clave("pizza").descripcion("Pizza").cobroUnidad(false)
                         .estatus("ACTIVO").imagen("some_url").build();
-        ProductoTipo productoTipoModel = ProductoTipo.builder().id(1l)
+        TipoProducto tipoProductoModel = TipoProducto.builder().id(1l)
                         .clave("hawaiana").descripcion("Hawaiana").estatus("ACTIVO").idProducto(1l).build();
         ProductoPedido productoPedidoModel = ProductoPedido.builder()
-                        .id(1l).idPedido(1l).producto(productoModel).sabor(null).tipoProducto(productoTipoModel)
+                        .id(1l).idPedido(1l).producto(productoModel).sabor(null).tipoProducto(tipoProductoModel)
                         .texto(null).comentarios(null).fechaRegistro(new Date()).fechaActualizacion(null)
                         .size(12).precio(300).build();
 
@@ -212,8 +211,8 @@ public class PedidoServiceTest {
         Mockito.when(productoRepository.findById(Mockito.anyLong()))
                 .thenReturn(Optional.of(productoModel));
 
-        Mockito.when(productoTipoRepository.findById(Mockito.anyLong()))
-                .thenReturn(Optional.of(productoTipoModel));
+        Mockito.when(tipoProductoRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(tipoProductoModel));
         Mockito.when(productoPedidoRepository.save(Mockito.any(ProductoPedido.class)))
                 .thenReturn(productoPedidoModel);
         Mockito.when(pedidoRepository.save(Mockito.any(Pedido.class)))
@@ -234,7 +233,7 @@ public class PedidoServiceTest {
     void deleteProductoPedido() {
         ProductoPedido productoPedido = ProductoPedido.builder()
                         .id(1l).idPedido(1l).producto(Producto.builder().id(1l).build())
-                        .sabor(Sabor.builder().id(1l).build()).tipoProducto(ProductoTipo.builder().id(1l).build())
+                        .sabor(Sabor.builder().id(1l).build()).tipoProducto(TipoProducto.builder().id(1l).build())
                         .texto("Felicidades").comentarios(null).fechaRegistro(new Date())
                         .fechaActualizacion(new Date()).size(15).precio(200).build();
 
@@ -250,7 +249,7 @@ public class PedidoServiceTest {
     void deletePedido(){
         ProductoPedido productoPedido = ProductoPedido.builder()
                 .id(1l).idPedido(1l).producto(Producto.builder().id(1l).build())
-                .sabor(Sabor.builder().id(1l).build()).tipoProducto(ProductoTipo.builder().id(1l).build())
+                .sabor(Sabor.builder().id(1l).build()).tipoProducto(TipoProducto.builder().id(1l).build())
                 .texto("Felicidades").comentarios(null).fechaRegistro(new Date())
                 .fechaActualizacion(new Date()).size(15).precio(200).build();
 

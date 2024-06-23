@@ -24,19 +24,8 @@ public class ProductoPedido {
     private Long idPedido;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto")
-    private Producto producto;
-
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_sabor", referencedColumnName = "id_sabor")
-    private Sabor sabor;
-
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_tipo_producto", referencedColumnName = "id_tipo_producto")
-    private ProductoTipo tipoProducto;
-
-    @Column(name = "texto")
-    private String texto;
+    @JoinColumn(name = "id_detalle_producto", referencedColumnName = "id_detalle_producto")
+    private DetalleProducto detalleProducto;
 
     @Column(name = "comentarios")
     private String comentarios;
@@ -46,10 +35,4 @@ public class ProductoPedido {
 
     @Column(name = "fecha_actualizacion")
     private Date fechaActualizacion;
-
-    @Column(name = "size")
-    private Integer size;
-
-    @Column(name= "precio")
-    private Integer precio;
 }

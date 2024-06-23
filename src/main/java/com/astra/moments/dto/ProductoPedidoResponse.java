@@ -14,13 +14,9 @@ import java.util.Date;
 public class ProductoPedidoResponse {
     private Long id;
     private Long idPedido;
-    private ProductoResponse producto;
-    private SaborResponse sabor;
-    private ProductoTipoResponse tipoProducto;
-    private String texto;
+    private DetalleProductoResponse detalleProducto;
     private String comentarios;
     private Date fechaRegistro;
     private Date fechaActualizacion;
-    private Integer porciones;
-    private Integer precio;
+
 }
