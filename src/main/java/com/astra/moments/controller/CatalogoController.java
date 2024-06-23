@@ -3,7 +3,6 @@ package com.astra.moments.controller;
 import com.astra.moments.dto.*;
 import com.astra.moments.service.CatalogoService;
 import com.astra.moments.service.ClienteService;
-import com.astra.moments.service.SaborService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

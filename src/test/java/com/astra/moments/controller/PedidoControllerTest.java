@@ -4,14 +4,10 @@ import com.astra.moments.config.JwtService;
 import com.astra.moments.dto.ClienteResponse;
 import com.astra.moments.dto.PedidoRequest;
 import com.astra.moments.dto.PedidoResponse;
-import com.astra.moments.model.Cliente;
-import com.astra.moments.model.Pedido;
 import com.astra.moments.model.User;
 import com.astra.moments.service.PedidoService;
 import com.astra.moments.util.EstatusEnum;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,8 +27,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Date;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @WebMvcTest(value = PedidoController.class)
 @AutoConfigureMockMvc(addFilters = false)

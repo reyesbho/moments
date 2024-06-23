@@ -1,7 +1,5 @@
 package com.astra.moments.dto;
 
-import com.astra.moments.model.*;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
