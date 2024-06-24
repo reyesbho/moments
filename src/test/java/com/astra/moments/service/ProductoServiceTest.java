@@ -1,7 +1,6 @@
 package com.astra.moments.service;
 
 import com.astra.moments.dto.ProductoResponse;
-import com.astra.moments.dto.ProductoTipoResponse;
 import com.astra.moments.model.Producto;
 import com.astra.moments.model.TipoProducto;
 import com.astra.moments.repository.ProductoRepository;
@@ -15,12 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +43,6 @@ class ProductoServiceTest {
                 .descripcion("Pastel")
                 .estatus("ACTIVO")
                 .imagen("https://algodulce.com.mx/cdn/shop/products/PINATEROCONFETTI_992x.jpg?v=1600198545")
-                .cobroUnidad(false)
                 .build();
 
         producto2 = Producto.builder()
@@ -58,7 +51,6 @@ class ProductoServiceTest {
                 .descripcion("Pizza")
                 .estatus("ACTIVO")
                 .imagen("https://algodulce.com.mx/cdn/shop/products/PINATEROCONFETTI_992x.jpg?v=1600198545")
-                .cobroUnidad(false)
                 .build();
         producto3 = Producto.builder()
                 .id(3l)
@@ -66,53 +58,37 @@ class ProductoServiceTest {
                 .descripcion("Gelatina")
                 .estatus("INACTIVO")
                 .imagen("https://algodulce.com.mx/cdn/shop/products/PINATEROCONFETTI_992x.jpg?v=1600198545")
-                .cobroUnidad(false)
                 .build();
 
         tipoProducto = TipoProducto.builder()
                 .id(1l)
                 .clave("hawaiana")
                 .descripcion("Hawayana")
-                .estatus("ACTIVO")
-                .idProducto(2l).build();
+                .estatus("ACTIVO").build();
 
         tipoProducto2 = TipoProducto.builder()
                 .id(2l)
                 .clave("peperoni")
                 .descripcion("Peperoni")
-                .estatus("ACTIVO")
-                .idProducto(2l).build();
+                .estatus("ACTIVO").build();
 
         tipoProducto3 = TipoProducto.builder()
                 .id(3l)
                 .clave("mexicana")
                 .descripcion("Mexicana")
-                .estatus("ACTIVO")
-                .idProducto(2l).build();
+                .estatus("ACTIVO").build();
     }
 
 
-    @DisplayName("ProductoService_getAllByStatus_ReturnPageProductoResponse")
-    @Test
-    void getProductos() {
-        Pageable pageable = PageRequest.of(0, 10);
 
-        Mockito.when(productoRepository.findByEstatus(Mockito.anyString(), Mockito.any(Pageable.class)))
-                .thenReturn(new PageImpl<>(Arrays.asList(producto, producto2), pageable, 2));
-
-        Page<ProductoResponse> products = this.productoService.getProductos(Optional.of("ACTIVO"), pageable);
-        Assertions.assertEquals(2, products.getContent().size());
-    }
-
-    @DisplayName("ProductoService_getAll_ReturnPageProductoResponse")
+    @DisplayName("ProductoService_getAll_ReturnListProductoResponse")
     @Test
     void getProductosByAll() {
-        Page<Producto> productos = Mockito.mock(PageImpl.class);
 
-        Mockito.when(productoRepository.findAll(Mockito.any(Pageable.class)))
-                .thenReturn(productos);
+        Mockito.when(productoRepository.findAll())
+                .thenReturn(Mockito.mock(List.class));
 
-        Page<ProductoResponse> saveProducts = this.productoService.getProductos(Optional.empty(), Mockito.mock(PageRequest.class));
+        List<ProductoResponse> saveProducts = this.productoService.getProductos();
         Assertions.assertNotNull(saveProducts);
     }
 
@@ -129,15 +105,5 @@ class ProductoServiceTest {
         Assertions.assertEquals("pizza", productoResponse.getClave());
         Assertions.assertEquals("Pizza", productoResponse.getDescripcion());
         Assertions.assertEquals("ACTIVO", productoResponse.getEstatus());
-    }
-
-    @Test
-    @DisplayName("ProductoService_getTiposByProductoId_ReturnListProductoTipoResponse")
-    void getProductoTipo(){
-        Mockito.when(tipoProductoRepository.findByIdProducto(Mockito.anyLong()))
-                .thenReturn(Arrays.asList(tipoProducto, tipoProducto2, tipoProducto3));
-
-        List<ProductoTipoResponse> tipos = productoService.getProductTipo(2l);
-        Assertions.assertEquals(3, tipos.size());
     }
 }

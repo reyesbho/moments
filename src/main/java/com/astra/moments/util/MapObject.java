@@ -98,4 +98,18 @@ public class MapObject {
                 .build();
     }
 
+    public static DetalleProductoResponse mapToDetalleProductoResponse(DetalleProducto detalleProducto){
+        return DetalleProductoResponse.builder()
+                .id(detalleProducto.getId())
+                .producto(mapToProductResponse(detalleProducto.getProducto()))
+                .size(mapToTamanoProductoResponse(detalleProducto.getSize()))
+                .sabor(mapToSaborResponse(detalleProducto.getSabor()))
+                .tipoProducto(mapToTipoProductoResponse(detalleProducto.getTipoProducto()))
+                .tipoCobro(mapToTipoCobroResponse(detalleProducto.getTipoCobro()))
+                .descripcion(detalleProducto.getDescripcion())
+                .estatus(detalleProducto.getEstatus())
+                .precio(detalleProducto.getPrecio())
+                .build();
+    }
+
 }

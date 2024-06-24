@@ -16,7 +16,7 @@ public class DetalleProducto {
 
 
     @Id
-    @Column(name = "id_detalle_procuto")
+    @Column(name = "id_detalle_producto")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToOne(fetch = FetchType.EAGER)

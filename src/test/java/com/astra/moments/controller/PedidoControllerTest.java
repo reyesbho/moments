@@ -51,7 +51,7 @@ class PedidoControllerTest {
     PedidoResponse pedido4;
 
     @BeforeEach
-    private void init(){
+    public void init(){
         pedido1 = PedidoResponse.builder().id(1l).fechaEntrega(new Date("30/06/2024")).horaEntrega(new Date("30/06/2024 16:00:00"))
                 .lugarEntrega("Tacahua").estatus(EstatusEnum.BACKLOG.toString()).total(200f).fechaRegistro(new Date())
                 .fechaActualizacion(null)
