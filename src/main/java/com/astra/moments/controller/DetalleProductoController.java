@@ -1,5 +1,6 @@
 package com.astra.moments.controller;
 
+import com.astra.moments.dto.DetalleProductoRequest;
 import com.astra.moments.dto.DetalleProductoResponse;
 import com.astra.moments.service.DetalleProductoService;
 import org.springframework.data.domain.Page;
@@ -7,10 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -32,4 +30,9 @@ public class DetalleProductoController {
         return new ResponseEntity(productos, HttpStatus.OK);
     }
 
+    @PostMapping("")
+    public ResponseEntity<DetalleProductoResponse> createDetalletProducto(@RequestBody DetalleProductoRequest detalleProductoRequest) throws Exception {
+        DetalleProductoResponse response = this.detalleProductoService.createDetalleProducto(detalleProductoRequest);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
 }

@@ -22,7 +22,7 @@ public class TamanoProducto {
     @Column(name = "descripcion", nullable = false)
     private String descripcion;
     @Column(name = "estatus", nullable = false)
-    private String estatus;
+    private Boolean estatus;
 
     public TamanoProducto(Long id){
         this.id = id;

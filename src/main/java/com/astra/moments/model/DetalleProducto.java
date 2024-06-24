@@ -37,7 +37,7 @@ public class DetalleProducto {
     @Column(name = "descripcion" , nullable = false)
     private String descripcion;
     @Column(name = "estatus" , nullable = false)
-    private String estatus;
+    private Boolean estatus;
     @Column(name = "precio" , nullable = false)
     private String precio;
 

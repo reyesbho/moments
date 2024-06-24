@@ -25,7 +25,7 @@ public class TipoProducto {
     private String descripcion;
 
     @Column(name = "estatus")
-    private String estatus;
+    private Boolean estatus;
 
 
     public TipoProducto(Long idProducto){
