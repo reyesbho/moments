@@ -1,7 +1,6 @@
 package com.astra.moments.controller;
 
 import com.astra.moments.dto.ProductoResponse;
-import com.astra.moments.dto.TipoProductoResponse;
 import com.astra.moments.service.ProductoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
