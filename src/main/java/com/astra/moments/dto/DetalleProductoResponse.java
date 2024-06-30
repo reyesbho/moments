@@ -1,9 +1,12 @@
 package com.astra.moments.dto;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 @Data
 @Builder
@@ -18,8 +21,10 @@ public class DetalleProductoResponse {
     private TipoProductoResponse tipoProducto;
     private TipoCobroResponse tipoCobro;
     private String descripcion;
-    private String estatus;
-    private String precio;
+    private Boolean estatus;
+    private Float precio;
+    private Date fechaRegistro;
+    private Date fechaActualizacion;
 
     public DetalleProductoResponse(Long id){
         this.id = id;

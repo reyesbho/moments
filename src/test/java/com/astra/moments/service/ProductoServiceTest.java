@@ -41,7 +41,7 @@ class ProductoServiceTest {
                 .id(1l)
                 .clave("pastel")
                 .descripcion("Pastel")
-                .estatus("ACTIVO")
+                .estatus(Boolean.TRUE)
                 .imagen("https://algodulce.com.mx/cdn/shop/products/PINATEROCONFETTI_992x.jpg?v=1600198545")
                 .build();
 
@@ -49,14 +49,14 @@ class ProductoServiceTest {
                 .id(2l)
                 .clave("pizza")
                 .descripcion("Pizza")
-                .estatus("ACTIVO")
+                .estatus(Boolean.TRUE)
                 .imagen("https://algodulce.com.mx/cdn/shop/products/PINATEROCONFETTI_992x.jpg?v=1600198545")
                 .build();
         producto3 = Producto.builder()
                 .id(3l)
                 .clave("gelatina")
                 .descripcion("Gelatina")
-                .estatus("INACTIVO")
+                .estatus(Boolean.TRUE)
                 .imagen("https://algodulce.com.mx/cdn/shop/products/PINATEROCONFETTI_992x.jpg?v=1600198545")
                 .build();
 
@@ -64,19 +64,19 @@ class ProductoServiceTest {
                 .id(1l)
                 .clave("hawaiana")
                 .descripcion("Hawayana")
-                .estatus("ACTIVO").build();
+                .estatus(Boolean.TRUE).build();
 
         tipoProducto2 = TipoProducto.builder()
                 .id(2l)
                 .clave("peperoni")
                 .descripcion("Peperoni")
-                .estatus("ACTIVO").build();
+                .estatus(Boolean.TRUE).build();
 
         tipoProducto3 = TipoProducto.builder()
                 .id(3l)
                 .clave("mexicana")
                 .descripcion("Mexicana")
-                .estatus("ACTIVO").build();
+                .estatus(Boolean.TRUE).build();
     }
 
 
@@ -104,6 +104,6 @@ class ProductoServiceTest {
         Assertions.assertEquals(2l, productoResponse.getId());
         Assertions.assertEquals("pizza", productoResponse.getClave());
         Assertions.assertEquals("Pizza", productoResponse.getDescripcion());
-        Assertions.assertEquals("ACTIVO", productoResponse.getEstatus());
+        Assertions.assertEquals(Boolean.TRUE, productoResponse.getEstatus());
     }
 }

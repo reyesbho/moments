@@ -21,7 +21,7 @@ public class DetalleProductoController {
         this.detalleProductoService = detalleProductoService;
     }
 
-    @GetMapping("/detailProducts")
+    @GetMapping("")
     public ResponseEntity getDetalleProductos(@RequestParam(name = "estatus", required = false) Optional<String> estatus,
                                               @RequestParam(name = "page", defaultValue = "0", required = false) int page,
                                               @RequestParam(name = "size",  defaultValue = "10", required = false) int size){

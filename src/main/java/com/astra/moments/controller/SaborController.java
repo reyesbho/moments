@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/catalogo")
+@RequestMapping("/api/sabor")
 public class SaborController {
 
     private SaborService saborService;
@@ -20,7 +20,7 @@ public class SaborController {
         this.saborService = saborService;
     }
 
-    @GetMapping("/sabor")
+    @GetMapping("")
     public ResponseEntity getSabores(){
         List<SaborResponse> saborResponseList = this.saborService.getSabores();
         return  new ResponseEntity(saborResponseList, HttpStatus.OK);

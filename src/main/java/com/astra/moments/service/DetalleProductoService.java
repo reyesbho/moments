@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -79,6 +80,8 @@ public class DetalleProductoService {
                 .descripcion(detalleProductoRequest.getDescripcion())
                 .estatus(Boolean.TRUE)
                 .precio(detalleProductoRequest.getPrecio())
+                .fechaRegistro(new Date())
+                .fechaActualizacion(null)
                 .build();
         this.detalleProductoRepository.save(detalleProducto);
         return MapObject.mapToDetalleProductoResponse(detalleProducto);

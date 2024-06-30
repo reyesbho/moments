@@ -42,6 +42,7 @@ public class MapObject {
         return ProductoPedidoResponse.builder()
                 .id(pedidoProducto.getId())
                 .idPedido(pedidoProducto.getIdPedido())
+                .detalleProducto(mapToDetalleProductoResponse(pedidoProducto.getDetalleProducto()))
                 .comentarios(pedidoProducto.getComentarios())
                 .fechaRegistro(pedidoProducto.getFechaRegistro())
                 .fechaActualizacion(pedidoProducto.getFechaActualizacion())
@@ -109,6 +110,8 @@ public class MapObject {
                 .descripcion(detalleProducto.getDescripcion())
                 .estatus(detalleProducto.getEstatus())
                 .precio(detalleProducto.getPrecio())
+                .fechaRegistro(detalleProducto.getFechaRegistro())
+                .fechaActualizacion(detalleProducto.getFechaActualizacion())
                 .build();
     }
 

@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @Builder
 @Entity
@@ -39,7 +41,11 @@ public class DetalleProducto {
     @Column(name = "estatus" , nullable = false)
     private Boolean estatus;
     @Column(name = "precio" , nullable = false)
-    private String precio;
+    private Float precio;
+    @Column(name = "fecha_registro", nullable = false)
+    private Date fechaRegistro;
+    @Column(name = "fecha_actualizacion")
+    private Date fechaActualizacion;
 
     public DetalleProducto(Long id){
         this.id = id;

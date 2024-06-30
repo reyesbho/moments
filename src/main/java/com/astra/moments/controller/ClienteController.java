@@ -22,7 +22,7 @@ public class ClienteController {
         this.clienteService = clienteService;
     }
 
-    @GetMapping("/cliente")
+    @GetMapping("")
     public ResponseEntity<List<ClienteResponse>> getClientes(@RequestParam(value = "search", required = false) Optional<String> search){
         List<ClienteResponse> clienteResponseList;
         if (search.isEmpty()){

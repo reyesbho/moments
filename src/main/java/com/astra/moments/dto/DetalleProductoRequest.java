@@ -18,6 +18,6 @@ public class DetalleProductoRequest {
     private Long tipoCobro;
     private String descripcion;
     private String estatus;
-    private String precio;
+    private Float precio;
 
 }

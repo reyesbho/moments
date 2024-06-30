@@ -13,7 +13,7 @@ public class TipoCobroResponse {
     private Long id;
     private String clave;
     private String descripcion;
-    private String estatus;
+    private Boolean estatus;
 
     public TipoCobroResponse(Long id){
         this.id = id;

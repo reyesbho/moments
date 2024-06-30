@@ -13,7 +13,7 @@ public class TamanoProductoResponse {
     private Long id;
     private String clave;
     private String descripcion;
-    private String estatus;
+    private Boolean estatus;
 
     public TamanoProductoResponse(Long id){
         this.id = id;

@@ -60,7 +60,7 @@ class ProductoControllerTest {
                 .id(1l)
                 .clave("pastel")
                 .descripcion("Pastel")
-                .estatus("ACTIVO")
+                .estatus(Boolean.TRUE)
                 .imagen("https://algodulce.com.mx/cdn/shop/products/PINATEROCONFETTI_992x.jpg?v=1600198545")
                 .build();
 
@@ -68,14 +68,14 @@ class ProductoControllerTest {
                 .id(2l)
                 .clave("pizza")
                 .descripcion("Pizza")
-                .estatus("ACTIVO")
+                .estatus(Boolean.TRUE)
                 .imagen("https://algodulce.com.mx/cdn/shop/products/PINATEROCONFETTI_992x.jpg?v=1600198545")
                 .build();
         producto3 = ProductoResponse.builder()
                 .id(3l)
                 .clave("gelatina")
                 .descripcion("Gelatina")
-                .estatus("INACTIVO")
+                .estatus(Boolean.TRUE)
                 .imagen("https://algodulce.com.mx/cdn/shop/products/PINATEROCONFETTI_992x.jpg?v=1600198545")
                 .build();
 
@@ -84,19 +84,19 @@ class ProductoControllerTest {
                 .id(1l)
                 .clave("hawaiana")
                 .descripcion("Hawayana")
-                .estatus("ACTIVO").build();
+                .estatus(Boolean.TRUE).build();
 
         productoTipo2 = TipoProductoResponse.builder()
                 .id(2l)
                 .clave("peperoni")
                 .descripcion("Peperoni")
-                .estatus("ACTIVO").build();
+                .estatus(Boolean.TRUE).build();
 
         productoTipo3 = TipoProductoResponse.builder()
                 .id(3l)
                 .clave("mexicana")
                 .descripcion("Mexicana")
-                .estatus("ACTIVO").build();
+                .estatus(Boolean.TRUE).build();
     }
 
 
