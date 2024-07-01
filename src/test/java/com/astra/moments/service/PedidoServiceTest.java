@@ -51,7 +51,7 @@ public class PedidoServiceTest {
 
     @BeforeAll
     static void SetUp(){
-        pedido1 = Pedido.builder().id(1l).fechaEntrega(new Date("30/06/2024")).horaEntrega(new Date("30/06/2024 16:00:00"))
+        pedido1 = Pedido.builder().id(1l).fechaEntrega(new Date("30/06/2024 16:00:00"))
                 .lugarEntrega("Tacahua").estatus(EstatusEnum.BACKLOG.toString()).total(200f).fechaRegistro(new Date())
                 .fechaActualizacion(null)
                 .numProductos(0)
@@ -59,21 +59,21 @@ public class PedidoServiceTest {
                 .cliente(Cliente.builder().id(1l).build())
                 .build();
 
-        pedido2 = Pedido.builder().id(2l).fechaEntrega(new Date("30/07/2024")).horaEntrega(new Date("30/07/2024 16:00:00"))
+        pedido2 = Pedido.builder().id(2l).fechaEntrega(new Date("30/07/2024 16:00:00"))
                 .lugarEntrega("Tacahua").estatus(EstatusEnum.DONE.toString()).total(500f).fechaRegistro(new Date())
                 .fechaActualizacion(null)
                 .numProductos(0)
                 .registradoPor("Reyes")
                 .cliente(Cliente.builder().id(1l).build())
                 .build();
-        pedido3 = Pedido.builder().id(3l).fechaEntrega(new Date("20/06/2024")).horaEntrega(new Date("20/06/2024 08:00:00"))
+        pedido3 = Pedido.builder().id(3l).fechaEntrega(new Date("20/06/2024 08:00:00"))
                 .lugarEntrega("Tacahua").estatus(EstatusEnum.CANCELED.toString()).total(1200f).fechaRegistro(new Date())
                 .fechaActualizacion(null)
                 .numProductos(0)
                 .registradoPor("Reyes")
                 .cliente(Cliente.builder().id(1l).build())
                 .build();
-        pedido4 = Pedido.builder().id(4l).fechaEntrega(new Date("25/06/2024")).horaEntrega(new Date("25/06/2024 20:00:00"))
+        pedido4 = Pedido.builder().id(4l).fechaEntrega(new Date("25/06/2024 20:00:00"))
                 .lugarEntrega("Tacahua").estatus(EstatusEnum.BACKLOG.toString()).total(100f).fechaRegistro(new Date())
                 .fechaActualizacion(null)
                 .numProductos(0)
@@ -167,9 +167,7 @@ public class PedidoServiceTest {
                 .nombre("Reyes").apellidoPaterno("Bustamante").apellidoMaterno("Hernandez").direccion("Tacahua").build();
         PedidoRequest pedidoRequest = PedidoRequest.builder()
                 .fechaEntrega(new Date())
-                .horaEntrega(new Date())
                 .lugarEntrega("Tacahua")
-                .total(500f)
                 .cliente(clienteRequest)
                 .build();
 

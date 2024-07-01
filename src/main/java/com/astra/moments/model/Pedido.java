@@ -19,12 +19,9 @@ public class Pedido {
     @Column(name = "id_pedido")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "fecha_entrega", nullable = false)
+    @Column(name = "fecha_entrega", nullable = true)
     @Temporal(TemporalType.DATE)
     private Date fechaEntrega;
-    @Column(name = "hora_entrega", nullable = true)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date horaEntrega;
     @Column(name = "lugar_entrega", nullable = false)
     private String lugarEntrega;
     @Column(name = "estatus", nullable = false)

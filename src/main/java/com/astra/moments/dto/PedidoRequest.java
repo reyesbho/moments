@@ -15,13 +15,9 @@ import java.util.List;
 @NoArgsConstructor
 public class PedidoRequest {
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date fechaEntrega;
-    @DateTimeFormat(pattern = "HH:mm")
-    private Date horaEntrega;
-    private String lugarEntrega;
-    private Float total;
-    private ClienteResponse cliente;
-    private List<ProductoPedidoRequest> productos;
     private Long idPedido;
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm")
+    private Date fechaEntrega;
+    private String lugarEntrega;
+    private ClienteResponse cliente;
 }

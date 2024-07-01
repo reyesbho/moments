@@ -68,6 +68,14 @@ public class PedidoController {
         return  new ResponseEntity<>(this.pedidoService.addPedido(pedidoRequest, currentUser), HttpStatus.CREATED);
     }
 
+    @PutMapping("")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<PedidoResponse> updatePedido(@RequestBody PedidoRequest pedidoRequest){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = (User) authentication.getPrincipal();
+        return  new ResponseEntity<>(this.pedidoService.updatePedido(pedidoRequest, currentUser), HttpStatus.CREATED);
+    }
+
     @PostMapping("/{idPedido}/producto")
     public ResponseEntity addProductToPedido(@PathVariable("idPedido") Long id, @RequestBody ProductoPedidoRequest producto){
         ProductoPedidoResponse productoPedidoResponse = this.pedidoService.addProductoToPedido(id, producto);

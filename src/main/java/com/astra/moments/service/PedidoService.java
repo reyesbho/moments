@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import javax.swing.text.html.Option;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -113,10 +114,9 @@ public class PedidoService {
 
         Pedido pedidoEntity = Pedido.builder()
                 .fechaEntrega(newPedido.getFechaEntrega())
-                .horaEntrega(newPedido.getHoraEntrega())
                 .lugarEntrega(newPedido.getLugarEntrega())
                 .estatus(EstatusEnum.INCOMPLETE.getValue())
-                .total(newPedido.getTotal())
+                .total(0f)
                 .fechaRegistro(new Date())
                 .fechaActualizacion(null)
                 .cliente(cliente)
@@ -126,6 +126,36 @@ public class PedidoService {
         this.pedidoRepository.save(pedidoEntity);
 
         return MapObject.mapToPedidoResponse(pedidoEntity);
+    }
+
+
+    @Transactional
+    public PedidoResponse updatePedido(PedidoRequest newPedido, User currentUser) throws EntityNotFoundException {
+        Optional<Pedido> optionalPedido= this.pedidoRepository.findById(newPedido.getIdPedido());
+        if (optionalPedido.isEmpty()){
+            throw new EntityNotFoundException("Error al buscar el pedido");
+        }
+        Pedido pedido= optionalPedido.get();
+        //validar el cliente
+        Cliente cliente = null;
+        if (Objects.isNull(newPedido.getCliente().getId()) || newPedido.getCliente().getId() == 0){
+            cliente = Cliente.builder()
+                    .nombre(newPedido.getCliente().getNombre())
+                    .apellidoPaterno(newPedido.getCliente().getApellidoPaterno())
+                    .apellidoMaterno(newPedido.getCliente().getApellidoMaterno())
+                    .direccion(newPedido.getCliente().getDireccion())
+                    .build();
+            this.clienteRepository.save(cliente);
+        }else{
+            Optional<Cliente> clienteOptional = this.clienteRepository.findById(newPedido.getCliente().getId());
+            cliente = clienteOptional.get();
+        }
+        //pedido
+        pedido.setFechaEntrega(newPedido.getFechaEntrega());
+        pedido.setLugarEntrega(newPedido.getLugarEntrega());
+        this.pedidoRepository.save(pedido);
+
+        return MapObject.mapToPedidoResponse(pedido);
     }
 
 
