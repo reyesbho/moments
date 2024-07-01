@@ -30,6 +30,9 @@ public class ProductoPedido {
     @Column(name = "comentarios")
     private String comentarios;
 
+    @Column(name = "cantidad", nullable = false)
+    private Long cantidad;
+
     @Column(name = "fecha_registro", nullable = false)
     private Date fechaRegistro;
 

@@ -69,8 +69,9 @@ public class PedidoController {
     }
 
     @PostMapping("/{idPedido}/producto")
-    public void addProductToPedido(@PathVariable("idPedido") Long id, @RequestBody ProductoPedidoRequest producto){
-        this.pedidoService.addProductoToPedido(id, producto);
+    public ResponseEntity addProductToPedido(@PathVariable("idPedido") Long id, @RequestBody ProductoPedidoRequest producto){
+        ProductoPedidoResponse productoPedidoResponse = this.pedidoService.addProductoToPedido(id, producto);
+        return new ResponseEntity(productoPedidoResponse, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{idPedido}")

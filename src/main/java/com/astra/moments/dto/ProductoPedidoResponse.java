@@ -16,6 +16,7 @@ public class ProductoPedidoResponse {
     private Long idPedido;
     private DetalleProductoResponse detalleProducto;
     private String comentarios;
+    private Long cantidad;
     private Date fechaRegistro;
     private Date fechaActualizacion;
 

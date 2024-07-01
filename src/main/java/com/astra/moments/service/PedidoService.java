@@ -5,10 +5,7 @@ import com.astra.moments.dto.PedidoResponse;
 import com.astra.moments.dto.ProductoPedidoRequest;
 import com.astra.moments.dto.ProductoPedidoResponse;
 import com.astra.moments.exception.EntityNotFoundException;
-import com.astra.moments.model.Cliente;
-import com.astra.moments.model.Pedido;
-import com.astra.moments.model.ProductoPedido;
-import com.astra.moments.model.User;
+import com.astra.moments.model.*;
 import com.astra.moments.repository.*;
 import com.astra.moments.util.EstatusEnum;
 import com.astra.moments.util.MapObject;
@@ -28,19 +25,14 @@ public class PedidoService {
     private PedidoRepository pedidoRepository;
     private ProductoPedidoRepository productoPedidoRepository;
     private ClienteRepository clienteRepository;
-    private SaborRepository saborRepository;
-    private TipoProductoRepository tipoProductoRepository;
-    private ProductoRepository productoRepository;
+    private DetalleProductoRepository detalleProductoRepository;
 
     public PedidoService(PedidoRepository pedidoRepository, ProductoPedidoRepository productoPedidoRepository,
-                         ClienteRepository clienteRepository, SaborRepository saborRepository,
-                         TipoProductoRepository tipoProductoRepository, ProductoRepository productoRepository){
+                         ClienteRepository clienteRepository, DetalleProductoRepository detalleProductoRepository){
         this.pedidoRepository = pedidoRepository;
         this.productoPedidoRepository = productoPedidoRepository;
         this.clienteRepository = clienteRepository;
-        this.saborRepository = saborRepository;
-        this.productoRepository = productoRepository;
-        this.tipoProductoRepository = tipoProductoRepository;
+        this.detalleProductoRepository = detalleProductoRepository;
     }
 
     public Page<PedidoResponse> getPedidos(Optional<String> estatus,String dateInit, String dateEnd, Pageable pageable) throws ParseException {
@@ -140,49 +132,61 @@ public class PedidoService {
     @Transactional
     public ProductoPedidoResponse addProductoToPedido(Long idPedido, ProductoPedidoRequest productoDto){
         Optional<Pedido> optionalPedido = this.pedidoRepository.findById(idPedido);
-        /*if (optionalPedido.isPresent()){
-            Pedido pedidoEntity=optionalPedido.get();
-            Producto productoEntity = this.productoRepository.findById(productoDto.getIdDetalleProducto()).orElse(new Producto(productoDto.getIdDetalleProducto()));
-            Sabor saborEntity = null;
-            if(Objects.nonNull(productoDto.getIdSabor())){
-                saborEntity = this.saborRepository.findById(productoDto.getIdSabor()).orElse(null);
-            }
+        if (optionalPedido.isEmpty()){
+            throw new EntityNotFoundException("Pedido no encontrado");
+        }
+        Pedido pedidoEntity = optionalPedido.get();
+        //validate detailProduct
+        Optional<DetalleProducto> optionalDetalleProducto =  this.detalleProductoRepository.findById(productoDto.getIdDetalleProducto());
+        if (optionalDetalleProducto.isEmpty()){
+            throw new EntityNotFoundException("Detalle de producto no encontrado");
+        }
+        DetalleProducto detalleProducto = optionalDetalleProducto.get();
+        // total
+        Float totalProducto = detalleProducto.getPrecio() * productoDto.getCantidad();
+        Float total = pedidoEntity.getTotal() + totalProducto;
+        pedidoEntity.setTotal(total);
+        //total products
+        Integer numProducts = pedidoEntity.getNumProductos() + 1 ;
+        pedidoEntity.setNumProductos(numProducts);
+        // entity productoPedido
+        ProductoPedido productoPedido = ProductoPedido.builder()
+                .idPedido(idPedido)
+                .detalleProducto(detalleProducto)
+                .comentarios(productoDto.getComentarios())
+                .cantidad(productoDto.getCantidad())
+                .fechaRegistro(new Date())
+                .build();
 
-            Float totalProducto = productoDto.getPrecio() * (productoEntity.isCobroUnidad() ? 1f : productoDto.getPorciones());
-            Float total = pedidoEntity.getTotal() + totalProducto;
-            pedidoEntity.setTotal(total);
-
-            Integer numProducts = pedidoEntity.getNumProductos() + 1 ;
-            pedidoEntity.setNumProductos(numProducts);
-
-            TipoProducto tipoProductoEntity = this.tipoProductoRepository.findById(productoDto.getIdTipoProducto()).orElse(new TipoProducto(productoDto.getIdTipoProducto()));
-            ProductoPedido producto=ProductoPedido.builder()
-                    .idPedido(pedidoEntity.getId())
-                    .producto(productoEntity)
-                    .sabor(saborEntity)
-                    .tipoProducto(tipoProductoEntity)
-                    .texto(productoDto.getTexto())
-                    .comentarios(productoDto.getComentarios())
-                    .fechaRegistro(new Date())
-                    .fechaActualizacion(null)
-                    .size(productoDto.getPorciones())
-                    .precio(productoDto.getPrecio())
-                    .build();
-            ProductoPedido productoSaved = this.productoPedidoRepository.save(producto);
-            this.pedidoRepository.save(pedidoEntity);
-
-            return MapObject.mapToPedidoProductoResponse(productoSaved);
-        }*/
-        return  null;
+        this.productoPedidoRepository.save(productoPedido);
+        return MapObject.mapToPedidoProductoResponse(productoPedido);
     }
 
     @Transactional
     public void deleteProductoPedido(Long idProductoPedido){
         Optional<ProductoPedido> optionalProductoPedido = this.productoPedidoRepository.findById(idProductoPedido);
-        if (optionalProductoPedido.isPresent()){
-            ProductoPedido productoPedido = optionalProductoPedido.get();
-            this.productoPedidoRepository.delete(productoPedido);
+        if (optionalProductoPedido.isEmpty()){
+            throw  new EntityNotFoundException("Error al buscar el producto");
         }
+        ProductoPedido productoPedido = optionalProductoPedido.get();
+        //validate detailProduct
+        DetalleProducto detalleProducto = productoPedido.getDetalleProducto();
+        //pedido
+        Optional<Pedido> optionalPedido = this.pedidoRepository.findById(productoPedido.getIdPedido());
+        if (optionalPedido.isEmpty()){
+            throw new EntityNotFoundException("Pedido no encontrado");
+        }
+        Pedido pedidoEntity = optionalPedido.get();
+        // total
+        Float totalProducto = detalleProducto.getPrecio() * productoPedido.getCantidad();
+        Float total = pedidoEntity.getTotal() - totalProducto;
+        pedidoEntity.setTotal(total);
+        //total products
+        Integer numProducts = pedidoEntity.getNumProductos() - 1;
+        pedidoEntity.setNumProductos(numProducts);
+        this.pedidoRepository.save(pedidoEntity);
+        //delete
+        this.productoPedidoRepository.delete(productoPedido);
     }
 
     @Transactional

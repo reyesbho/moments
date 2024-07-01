@@ -14,4 +14,5 @@ public class ProductoPedidoRequest {
 
     private Long idDetalleProducto;
     private String comentarios;
+    private Long cantidad;
 }

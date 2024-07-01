@@ -32,4 +32,9 @@ public class ProductoController {
         return new ResponseEntity(this.productoService.getProducto(id), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}/producto")
+    public ResponseEntity getDetailProducts(@PathVariable("id") Long idProducto){
+        return new ResponseEntity(this.productoService.getDetailProductsByProducto(idProducto), HttpStatus.OK);
+    }
+
 }

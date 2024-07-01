@@ -44,6 +44,7 @@ public class MapObject {
                 .idPedido(pedidoProducto.getIdPedido())
                 .detalleProducto(mapToDetalleProductoResponse(pedidoProducto.getDetalleProducto()))
                 .comentarios(pedidoProducto.getComentarios())
+                .cantidad(pedidoProducto.getCantidad())
                 .fechaRegistro(pedidoProducto.getFechaRegistro())
                 .fechaActualizacion(pedidoProducto.getFechaActualizacion())
                 .build();
