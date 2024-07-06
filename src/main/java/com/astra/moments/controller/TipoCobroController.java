@@ -1,12 +1,11 @@
 package com.astra.moments.controller;
 
+import com.astra.moments.dto.TamanoProductoResponse;
 import com.astra.moments.dto.TipoCobroResponse;
 import com.astra.moments.service.TipoCobroService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,6 +23,18 @@ public class TipoCobroController {
     public ResponseEntity getTipoCobros(){
         List<TipoCobroResponse> saborResponseList = this.tipoCobroService.getTipoCobros();
         return  new ResponseEntity(saborResponseList, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{idTipoCobro}")
+    public ResponseEntity deleteTipoCobro(@PathVariable("idTipoCobro") Long idTipoCobro){
+        this.deleteTipoCobro(idTipoCobro);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PutMapping("/{idTipoCobro}/{estatus}")
+    public ResponseEntity<TipoCobroResponse> updateStatus(@PathVariable("idTipoCobro") Long idTipoCobro, @PathVariable("estatus") boolean estatus){
+        TipoCobroResponse tipoCobroResponse = this.tipoCobroService.updateStatus(idTipoCobro, estatus);
+        return new ResponseEntity<>(tipoCobroResponse, HttpStatus.OK);
     }
 
 }

@@ -1,12 +1,16 @@
 package com.astra.moments.service;
 
 import com.astra.moments.dto.TipoProductoResponse;
+import com.astra.moments.exception.EntityNotFoundException;
+import com.astra.moments.model.TipoCobro;
 import com.astra.moments.model.TipoProducto;
 import com.astra.moments.repository.TipoProductoRepository;
 import com.astra.moments.util.MapObject;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TipoProductoService {
@@ -22,4 +26,28 @@ public class TipoProductoService {
         return tipoProductos.stream().map(MapObject::mapToTipoProductoResponse).toList();
     }
 
+    @Transactional
+    public void deleteTipoProducto(Long idTipoProducto){
+        Optional<TipoProducto> optionalTipoProductoo = this.tipoProductoRepository.findById(idTipoProducto);
+        if (optionalTipoProductoo.isEmpty()){
+            throw new EntityNotFoundException("Error al buscar el tipo de cobro");
+        }
+        try {
+            this.tipoProductoRepository.delete(optionalTipoProductoo.get());
+        }catch (Exception e){
+            throw  new RuntimeException("Error al eliminar el tipo de producto");
+        }
+    }
+
+    @Transactional
+    public TipoProductoResponse updateStatus(Long idTipoProducto, Boolean status){
+        Optional<TipoProducto> optionalTipoProducto = this.tipoProductoRepository.findById(idTipoProducto);
+        if (optionalTipoProducto.isEmpty()){
+            throw new EntityNotFoundException("Error al buscar el tipo de producto");
+        }
+        TipoProducto tipoProducto = optionalTipoProducto.get();
+        tipoProducto.setEstatus(status);
+        this.tipoProductoRepository.save(tipoProducto);
+        return MapObject.mapToTipoProductoResponse(tipoProducto);
+    }
 }

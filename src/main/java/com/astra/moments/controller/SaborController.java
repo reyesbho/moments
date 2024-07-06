@@ -4,9 +4,7 @@ import com.astra.moments.dto.SaborResponse;
 import com.astra.moments.service.SaborService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,4 +24,15 @@ public class SaborController {
         return  new ResponseEntity(saborResponseList, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{idSabor}")
+    public ResponseEntity deleteSabor(@PathVariable("idSabor") Long idSabor){
+        this.saborService.deleteSabor(idSabor);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PutMapping("/{idSabor}/{estatus}")
+    public ResponseEntity<SaborResponse> updateStatus(@PathVariable("idSabor") Long idSabor, @PathVariable("estatus") boolean estatus){
+        SaborResponse saborResponse = this.saborService.updateStatus(idSabor, estatus);
+        return new ResponseEntity<>(saborResponse, HttpStatus.OK);
+    }
 }
