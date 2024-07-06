@@ -1,7 +1,9 @@
 package com.astra.moments.service;
 
+import com.astra.moments.dto.TipoCobroRequest;
 import com.astra.moments.dto.TipoCobroResponse;
 import com.astra.moments.dto.TipoProductoResponse;
+import com.astra.moments.exception.EntityExistException;
 import com.astra.moments.exception.EntityNotFoundException;
 import com.astra.moments.model.Sabor;
 import com.astra.moments.model.TipoCobro;
@@ -54,4 +56,18 @@ public class TipoCobroService {
         return MapObject.mapToTipoCobroResponse(tipoCobro);
     }
 
+    @Transactional
+    public TipoCobroResponse addTipoCobro(TipoCobroRequest tipoCobroRequest){
+        Optional<TipoCobro> optionalTipoCobro = this.tipoCobroRepository.findyByClave(tipoCobroRequest.getClave());
+        if (optionalTipoCobro.isPresent()){
+            throw new EntityExistException("El tipo de cobo ya existe");
+        }
+        TipoCobro tipoCobro = TipoCobro.builder()
+                .clave(tipoCobroRequest.getClave())
+                .descripcion(tipoCobroRequest.getDescripcion())
+                .estatus(Boolean.TRUE)
+                .build();
+        this.tipoCobroRepository.save(tipoCobro);
+        return MapObject.mapToTipoCobroResponse(tipoCobro);
+    }
 }

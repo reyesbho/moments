@@ -1,5 +1,6 @@
 package com.astra.moments.controller;
 
+import com.astra.moments.dto.SaborRequest;
 import com.astra.moments.dto.SaborResponse;
 import com.astra.moments.service.SaborService;
 import org.springframework.http.HttpStatus;
@@ -34,5 +35,10 @@ public class SaborController {
     public ResponseEntity<SaborResponse> updateStatus(@PathVariable("idSabor") Long idSabor, @PathVariable("estatus") boolean estatus){
         SaborResponse saborResponse = this.saborService.updateStatus(idSabor, estatus);
         return new ResponseEntity<>(saborResponse, HttpStatus.OK);
+    }
+
+    @PostMapping("")
+    public ResponseEntity<SaborResponse> addSabor(@RequestBody SaborRequest saborRequest){
+        return new ResponseEntity<>(this.saborService.addSabor(saborRequest),HttpStatus.CREATED);
     }
 }

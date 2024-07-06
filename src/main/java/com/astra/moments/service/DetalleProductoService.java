@@ -5,7 +5,6 @@ import com.astra.moments.dto.DetalleProductoResponse;
 import com.astra.moments.exception.EntityNotFoundException;
 import com.astra.moments.model.*;
 import com.astra.moments.repository.*;
-import com.astra.moments.util.EstatusEnum;
 import com.astra.moments.util.MapObject;
 import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.domain.Page;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -26,19 +24,19 @@ public class DetalleProductoService {
     private SaborRepository saborRepository;
     private TipoCobroRepository tipoCobroRepository;
     private TipoProductoRepository tipoProductoRepository;
-    private TamanoProductoRepository tamanoProductoRepository;
+    private SizeProductoRepository sizeProductoRepository;
 
     DetalleProductoService( DetalleProductoRepository detalleProductoRepository,
                             ProductoRepository productoRepository,SaborRepository saborRepository,
                             TipoCobroRepository tipoCobroRepository,
                             TipoProductoRepository tipoProductoRepository,
-                            TamanoProductoRepository tamanoProductoRepository){
+                            SizeProductoRepository sizeProductoRepository){
         this.detalleProductoRepository = detalleProductoRepository;
         this.productoRepository = productoRepository;
         this.saborRepository = saborRepository;
         this.tipoCobroRepository = tipoCobroRepository;
         this.tipoProductoRepository = tipoProductoRepository;
-        this.tamanoProductoRepository = tamanoProductoRepository;
+        this.sizeProductoRepository = sizeProductoRepository;
     }
 
     @ReadOnlyProperty
@@ -68,7 +66,7 @@ public class DetalleProductoService {
         TipoCobro tipoCobro = this.tipoCobroRepository.findById(detalleProductoRequest.getTipoCobro())
                 .orElseThrow(() -> new EntityNotFoundException("Error al validar el tipo cobro"));
         //validate size
-        TamanoProducto tamano = this.tamanoProductoRepository.findById(detalleProductoRequest.getSize())
+        SizeProducto tamano = this.sizeProductoRepository.findById(detalleProductoRequest.getSize())
                 .orElseThrow(() -> new EntityNotFoundException("Error al validar el tamaño"));
 
         DetalleProducto detalleProducto = DetalleProducto.builder()

@@ -81,12 +81,12 @@ public class MapObject {
     }
 
 
-    public static TamanoProductoResponse mapToTamanoProductoResponse(TamanoProducto tamanoProducto){
-        return TamanoProductoResponse.builder()
-                .id(tamanoProducto.getId())
-                .clave(tamanoProducto.getClave())
-                .descripcion(tamanoProducto.getDescripcion())
-                .estatus(tamanoProducto.getEstatus())
+    public static SizeProductoResponse mapToSizeProductoResponse(SizeProducto sizeProducto){
+        return SizeProductoResponse.builder()
+                .id(sizeProducto.getId())
+                .clave(sizeProducto.getClave())
+                .descripcion(sizeProducto.getDescripcion())
+                .estatus(sizeProducto.getEstatus())
                 .build();
     }
 
@@ -103,7 +103,7 @@ public class MapObject {
         return DetalleProductoResponse.builder()
                 .id(detalleProducto.getId())
                 .producto(mapToProductResponse(detalleProducto.getProducto()))
-                .size(mapToTamanoProductoResponse(detalleProducto.getSize()))
+                .size(mapToSizeProductoResponse(detalleProducto.getSize()))
                 .sabor(mapToSaborResponse(detalleProducto.getSabor()))
                 .tipoProducto(mapToTipoProductoResponse(detalleProducto.getTipoProducto()))
                 .tipoCobro(mapToTipoCobroResponse(detalleProducto.getTipoCobro()))

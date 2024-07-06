@@ -1,6 +1,8 @@
 package com.astra.moments.service;
 
+import com.astra.moments.dto.TipoProductoRequest;
 import com.astra.moments.dto.TipoProductoResponse;
+import com.astra.moments.exception.EntityExistException;
 import com.astra.moments.exception.EntityNotFoundException;
 import com.astra.moments.model.TipoCobro;
 import com.astra.moments.model.TipoProducto;
@@ -47,6 +49,21 @@ public class TipoProductoService {
         }
         TipoProducto tipoProducto = optionalTipoProducto.get();
         tipoProducto.setEstatus(status);
+        this.tipoProductoRepository.save(tipoProducto);
+        return MapObject.mapToTipoProductoResponse(tipoProducto);
+    }
+
+    @Transactional
+    public TipoProductoResponse addTipoProducto(TipoProductoRequest tipoProductoRequest){
+        Optional<TipoProducto> optionalTipoProducto = this.tipoProductoRepository.findByClave(tipoProductoRequest.getClave());
+        if (optionalTipoProducto.isPresent()){
+            throw  new EntityExistException("El tipo producto ya existe");
+        }
+        TipoProducto tipoProducto = TipoProducto.builder()
+                .clave(tipoProductoRequest.getClave())
+                .descripcion(tipoProductoRequest.getDescripcion())
+                .estatus(Boolean.TRUE)
+                .build();
         this.tipoProductoRepository.save(tipoProducto);
         return MapObject.mapToTipoProductoResponse(tipoProducto);
     }

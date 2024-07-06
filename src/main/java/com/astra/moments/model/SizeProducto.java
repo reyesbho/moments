@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TamanoProducto {
+public class SizeProducto {
     @Id
     @Column(name = "id_size")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class TamanoProducto {
     @Column(name = "estatus", nullable = false)
     private Boolean estatus;
 
-    public TamanoProducto(Long id){
+    public SizeProducto(Long id){
         this.id = id;
     }
 }
