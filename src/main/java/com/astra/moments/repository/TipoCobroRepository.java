@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface TipoCobroRepository extends JpaRepository<TipoCobro, Long> {
-    Optional<TipoCobro> findyByClave(String clave);
+    Optional<TipoCobro> findByClave(String clave);
 }

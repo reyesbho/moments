@@ -58,7 +58,7 @@ public class TipoCobroService {
 
     @Transactional
     public TipoCobroResponse addTipoCobro(TipoCobroRequest tipoCobroRequest){
-        Optional<TipoCobro> optionalTipoCobro = this.tipoCobroRepository.findyByClave(tipoCobroRequest.getClave());
+        Optional<TipoCobro> optionalTipoCobro = this.tipoCobroRepository.findByClave(tipoCobroRequest.getClave());
         if (optionalTipoCobro.isPresent()){
             throw new EntityExistException("El tipo de cobo ya existe");
         }
