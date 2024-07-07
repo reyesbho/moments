@@ -26,7 +26,7 @@ public class SizeProductoController {
     }
 
     @DeleteMapping("/{idSize}")
-    public ResponseEntity deleteTamano(@PathVariable("idSize") Long idSize){
+    public ResponseEntity deleteSizeProduct(@PathVariable("idSize") Long idSize){
         this.sizeProductoService.deleteTamano(idSize);
         return new ResponseEntity(HttpStatus.OK);
     }

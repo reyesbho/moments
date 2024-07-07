@@ -27,7 +27,7 @@ public class TipoCobroController {
 
     @DeleteMapping("/{idTipoCobro}")
     public ResponseEntity deleteTipoCobro(@PathVariable("idTipoCobro") Long idTipoCobro){
-        this.deleteTipoCobro(idTipoCobro);
+        this.tipoCobroService.deleteTipoCobro(idTipoCobro);
         return new ResponseEntity(HttpStatus.OK);
     }
 
