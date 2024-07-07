@@ -2,12 +2,9 @@ package com.astra.moments.service;
 
 import com.astra.moments.dto.TipoCobroRequest;
 import com.astra.moments.dto.TipoCobroResponse;
-import com.astra.moments.dto.TipoProductoResponse;
 import com.astra.moments.exception.EntityExistException;
 import com.astra.moments.exception.EntityNotFoundException;
-import com.astra.moments.model.Sabor;
 import com.astra.moments.model.TipoCobro;
-import com.astra.moments.model.TipoProducto;
 import com.astra.moments.repository.TipoCobroRepository;
 import com.astra.moments.util.MapObject;
 import org.springframework.stereotype.Service;

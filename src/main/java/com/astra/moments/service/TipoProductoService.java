@@ -4,7 +4,6 @@ import com.astra.moments.dto.TipoProductoRequest;
 import com.astra.moments.dto.TipoProductoResponse;
 import com.astra.moments.exception.EntityExistException;
 import com.astra.moments.exception.EntityNotFoundException;
-import com.astra.moments.model.TipoCobro;
 import com.astra.moments.model.TipoProducto;
 import com.astra.moments.repository.TipoProductoRepository;
 import com.astra.moments.util.MapObject;

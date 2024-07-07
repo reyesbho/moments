@@ -1,6 +1,5 @@
 package com.astra.moments.controller;
 
-import com.astra.moments.dto.TipoCobroResponse;
 import com.astra.moments.dto.TipoProductoRequest;
 import com.astra.moments.dto.TipoProductoResponse;
 import com.astra.moments.service.TipoProductoService;
