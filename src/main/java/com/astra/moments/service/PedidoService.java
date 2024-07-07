@@ -9,6 +9,8 @@ import com.astra.moments.model.*;
 import com.astra.moments.repository.*;
 import com.astra.moments.util.EstatusEnum;
 import com.astra.moments.util.MapObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +29,7 @@ public class PedidoService {
     private ProductoPedidoRepository productoPedidoRepository;
     private ClienteRepository clienteRepository;
     private DetalleProductoRepository detalleProductoRepository;
+    private Logger LOGGER = LoggerFactory.getLogger(PedidoService.class);
 
     public PedidoService(PedidoRepository pedidoRepository, ProductoPedidoRepository productoPedidoRepository,
                          ClienteRepository clienteRepository, DetalleProductoRepository detalleProductoRepository){
@@ -37,14 +40,29 @@ public class PedidoService {
     }
 
     public Page<PedidoResponse> getPedidos(Optional<String> estatus,String dateInit, String dateEnd, Pageable pageable) throws ParseException {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ROOT);
         Date dateInitFilter = null;
         Date dateEndFilter = null;
         boolean hasFilterDate = true;
         boolean isSearchAll = estatus.isPresent() && estatus.get().equalsIgnoreCase("ALL");
         if(StringUtils.hasText(dateInit) && StringUtils.hasText(dateEnd)){
-            dateInitFilter = formatter.parse(dateInit);
-            dateEndFilter = formatter.parse(dateEnd);
+            Date dateInitAux = formatter.parse(dateInit);
+            Date dateEndAux = formatter.parse(dateEnd);
+
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(dateInitAux);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+
+            dateInitFilter = cal.getTime();
+            cal.setTime(dateEndAux);
+            cal.set(Calendar.HOUR_OF_DAY, 23);
+            cal.set(Calendar.MINUTE, 59);
+            cal.set(Calendar.SECOND, 59);
+            cal.set(Calendar.MILLISECOND, 999);
+            dateEndFilter = cal.getTime();
         }else{
             hasFilterDate = false;
         }
