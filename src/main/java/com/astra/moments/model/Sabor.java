@@ -22,7 +22,7 @@ public class Sabor {
     @Column(name = "descripcion", nullable = false)
     private String descripcion;
     @Column(name = "estatus", nullable = false)
-    private String estatus;
+    private Boolean estatus;
 
     public Sabor(Long idSabor){
         this.id = idSabor;

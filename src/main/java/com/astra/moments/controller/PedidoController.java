@@ -12,16 +12,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
-import java.util.Date;
 import java.util.Optional;
 
 @RestController
@@ -71,9 +68,18 @@ public class PedidoController {
         return  new ResponseEntity<>(this.pedidoService.addPedido(pedidoRequest, currentUser), HttpStatus.CREATED);
     }
 
+    @PutMapping("")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<PedidoResponse> updatePedido(@RequestBody PedidoRequest pedidoRequest){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = (User) authentication.getPrincipal();
+        return  new ResponseEntity<>(this.pedidoService.updatePedido(pedidoRequest, currentUser), HttpStatus.CREATED);
+    }
+
     @PostMapping("/{idPedido}/producto")
-    public void addProductToPedido(@PathVariable("idPedido") Long id, @RequestBody ProductoPedidoRequest producto){
-        this.pedidoService.addProductoToPedido(id, producto);
+    public ResponseEntity addProductToPedido(@PathVariable("idPedido") Long id, @RequestBody ProductoPedidoRequest producto){
+        ProductoPedidoResponse productoPedidoResponse = this.pedidoService.addProductoToPedido(id, producto);
+        return new ResponseEntity(productoPedidoResponse, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{idPedido}")

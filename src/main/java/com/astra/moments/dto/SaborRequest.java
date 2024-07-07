@@ -9,10 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductoPedidoRequest {
-
-
-    private Long idDetalleProducto;
-    private String comentarios;
-    private Long cantidad;
+public class SaborRequest {
+    private Long id;
+    private String clave;
+    private String descripcion;
 }

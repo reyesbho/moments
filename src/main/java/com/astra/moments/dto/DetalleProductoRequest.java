@@ -9,9 +9,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SaborResponse {
-    private Long id;
-    private String clave;
+public class DetalleProductoRequest {
+
+    private Long producto;
+    private Long size;
+    private Long sabor;
+    private Long tipoProducto;
+    private Long tipoCobro;
     private String descripcion;
-    private Boolean estatus;
+    private String estatus;
+    private Float precio;
+
 }

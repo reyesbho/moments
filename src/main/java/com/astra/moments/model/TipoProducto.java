@@ -7,12 +7,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "cat_producto_tipo")
+@Table(name = "cat_tipo_producto")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductoTipo {
+public class TipoProducto {
     @Id
     @Column(name = "id_tipo_producto")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,12 +25,10 @@ public class ProductoTipo {
     private String descripcion;
 
     @Column(name = "estatus")
-    private String estatus;
+    private Boolean estatus;
 
-    @Column(name = "id_producto")
-    private Long idProducto;
 
-    public ProductoTipo(Long idProducto){
+    public TipoProducto(Long idProducto){
         this.id = idProducto;
     }
 }

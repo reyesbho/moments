@@ -19,12 +19,9 @@ public class Pedido {
     @Column(name = "id_pedido")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "fecha_entrega", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date fechaEntrega;
-    @Column(name = "hora_entrega", nullable = true)
+    @Column(name = "fecha_entrega", nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date horaEntrega;
+    private Date fechaEntrega;
     @Column(name = "lugar_entrega", nullable = false)
     private String lugarEntrega;
     @Column(name = "estatus", nullable = false)
@@ -40,7 +37,7 @@ public class Pedido {
     @Column(name = "registrado_por")
     private String registradoPor;
 
-    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @OneToOne( fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cliente", referencedColumnName = "id_cliente")
     private Cliente cliente;
 

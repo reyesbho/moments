@@ -6,12 +6,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SaborResponse {
+@Builder
+public class TipoCobroResponse {
     private Long id;
     private String clave;
     private String descripcion;
     private Boolean estatus;
+
+    public TipoCobroResponse(Long id){
+        this.id = id;
+    }
 }
