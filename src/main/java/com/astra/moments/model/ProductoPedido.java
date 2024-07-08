@@ -38,4 +38,15 @@ public class ProductoPedido {
 
     @Column(name = "fecha_actualizacion")
     private Date fechaActualizacion;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_sabor", referencedColumnName = "id_sabor", nullable = true)
+    private Sabor sabor;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_tipo_producto", referencedColumnName = "id_tipo_producto", nullable = false)
+    private TipoProducto tipoProducto;
+    @Column(name = "total", nullable = false)
+    private Float total;
+    @Column(name = "descuento", nullable = false)
+    private Float descuento;
 }

@@ -1,5 +1,6 @@
 package com.astra.moments.dto;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,10 @@ public class ProductoPedidoRequest {
 
 
     private Long idDetalleProducto;
+    private Long idSabor;
+    private Long idTipoProducto;
     private String comentarios;
     private Long cantidad;
+    private Float total;
+    private Float descuento;
 }
