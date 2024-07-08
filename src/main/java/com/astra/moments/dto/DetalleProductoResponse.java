@@ -16,8 +16,6 @@ public class DetalleProductoResponse {
     private Long id;
     private ProductoResponse producto;
     private SizeProductoResponse size;
-    private SaborResponse sabor;
-    private TipoProductoResponse tipoProducto;
     private TipoCobroResponse tipoCobro;
     private String descripcion;
     private Boolean estatus;

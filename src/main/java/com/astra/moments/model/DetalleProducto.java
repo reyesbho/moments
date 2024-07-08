@@ -28,12 +28,6 @@ public class DetalleProducto {
     @JoinColumn(name = "id_size", referencedColumnName = "id_size", nullable = false)
     private SizeProducto size;
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_sabor", referencedColumnName = "id_sabor", nullable = true)
-    private Sabor sabor;
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_tipo_producto", referencedColumnName = "id_tipo_producto", nullable = false)
-    private TipoProducto tipoProducto;
-    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_tipo_cobro", referencedColumnName = "id_tipo_cobro", nullable = false)
     private TipoCobro tipoCobro;
     @Column(name = "descripcion" , nullable = false)

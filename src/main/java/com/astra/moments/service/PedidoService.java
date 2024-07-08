@@ -6,10 +6,7 @@ import com.astra.moments.dto.ProductoPedidoRequest;
 import com.astra.moments.dto.ProductoPedidoResponse;
 import com.astra.moments.exception.EntityNotFoundException;
 import com.astra.moments.model.*;
-import com.astra.moments.repository.ClienteRepository;
-import com.astra.moments.repository.DetalleProductoRepository;
-import com.astra.moments.repository.PedidoRepository;
-import com.astra.moments.repository.ProductoPedidoRepository;
+import com.astra.moments.repository.*;
 import com.astra.moments.util.EstatusEnum;
 import com.astra.moments.util.MapObject;
 import org.slf4j.Logger;
@@ -31,14 +28,19 @@ public class PedidoService {
     private ProductoPedidoRepository productoPedidoRepository;
     private ClienteRepository clienteRepository;
     private DetalleProductoRepository detalleProductoRepository;
+    private SaborRepository saborRepository;
+    private TipoProductoRepository tipoProductoRepository;
     private Logger LOGGER = LoggerFactory.getLogger(PedidoService.class);
 
     public PedidoService(PedidoRepository pedidoRepository, ProductoPedidoRepository productoPedidoRepository,
-                         ClienteRepository clienteRepository, DetalleProductoRepository detalleProductoRepository){
+                         ClienteRepository clienteRepository, DetalleProductoRepository detalleProductoRepository,
+                         SaborRepository saborRepository, TipoProductoRepository tipoProductoRepository){
         this.pedidoRepository = pedidoRepository;
         this.productoPedidoRepository = productoPedidoRepository;
         this.clienteRepository = clienteRepository;
         this.detalleProductoRepository = detalleProductoRepository;
+        this.saborRepository = saborRepository;
+        this.tipoProductoRepository = tipoProductoRepository;
     }
 
     public Page<PedidoResponse> getPedidos(Optional<String> estatus,String dateInit, String dateEnd, Pageable pageable) throws ParseException {
@@ -181,21 +183,22 @@ public class PedidoService {
 
     @Transactional
     public ProductoPedidoResponse addProductoToPedido(Long idPedido, ProductoPedidoRequest productoDto){
-        Optional<Pedido> optionalPedido = this.pedidoRepository.findById(idPedido);
-        if (optionalPedido.isEmpty()){
-            throw new EntityNotFoundException("Pedido no encontrado");
-        }
-        Pedido pedidoEntity = optionalPedido.get();
+        Pedido pedidoEntity = this.pedidoRepository.findById(idPedido).
+                orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado"));
         //validate detailProduct
-        Optional<DetalleProducto> optionalDetalleProducto =  this.detalleProductoRepository.findById(productoDto.getIdDetalleProducto());
-        if (optionalDetalleProducto.isEmpty()){
-            throw new EntityNotFoundException("Detalle de producto no encontrado");
-        }
-        DetalleProducto detalleProducto = optionalDetalleProducto.get();
-        // total
-        Float totalProducto = detalleProducto.getPrecio() * productoDto.getCantidad();
-        Float total = pedidoEntity.getTotal() + totalProducto;
-        pedidoEntity.setTotal(total);
+        DetalleProducto detalleProducto =  this.detalleProductoRepository.findById(productoDto.getIdDetalleProducto())
+                .orElseThrow(() -> new EntityNotFoundException("Detalle de producto no encontrado"));
+        //validate sabor
+        Sabor sabor =  this.saborRepository.findById(productoDto.getIdSabor()).orElse(null);
+        //validate tipoProducto
+        TipoProducto tipoProducto = this.tipoProductoRepository.findById(productoDto.getIdTipoProducto())
+                .orElseThrow(() -> new EntityNotFoundException("Error al validar el tipo producto"));
+        // total producto
+        Float subTotalProduct = detalleProducto.getPrecio() * productoDto.getCantidad();
+        Float totalProducto = subTotalProduct - productoDto.getDescuento();
+        //total pedido
+        Float totalPedido = pedidoEntity.getTotal() + totalProducto;
+        pedidoEntity.setTotal(totalPedido);
         //total products
         Integer numProducts = pedidoEntity.getNumProductos() + 1 ;
         pedidoEntity.setNumProductos(numProducts);
@@ -204,8 +207,12 @@ public class PedidoService {
                 .idPedido(idPedido)
                 .detalleProducto(detalleProducto)
                 .comentarios(productoDto.getComentarios())
+                .sabor(sabor)
+                .tipoProducto(tipoProducto)
                 .cantidad(productoDto.getCantidad())
                 .fechaRegistro(new Date())
+                .total(totalProducto)
+                .descuento(productoDto.getDescuento())
                 .build();
 
         this.productoPedidoRepository.save(productoPedido);

@@ -43,9 +43,13 @@ public class MapObject {
                 .idPedido(pedidoProducto.getIdPedido())
                 .detalleProducto(mapToDetalleProductoResponse(pedidoProducto.getDetalleProducto()))
                 .comentarios(pedidoProducto.getComentarios())
+                .sabor(mapToSaborResponse(pedidoProducto.getSabor()))
+                .tipoProducto(mapToTipoProductoResponse(pedidoProducto.getTipoProducto()))
                 .cantidad(pedidoProducto.getCantidad())
                 .fechaRegistro(pedidoProducto.getFechaRegistro())
                 .fechaActualizacion(pedidoProducto.getFechaActualizacion())
+                .total(pedidoProducto.getTotal())
+                .descuento(pedidoProducto.getDescuento())
                 .build();
     }
 
@@ -104,8 +108,6 @@ public class MapObject {
                 .id(detalleProducto.getId())
                 .producto(mapToProductResponse(detalleProducto.getProducto()))
                 .size(mapToSizeProductoResponse(detalleProducto.getSize()))
-                .sabor(mapToSaborResponse(detalleProducto.getSabor()))
-                .tipoProducto(mapToTipoProductoResponse(detalleProducto.getTipoProducto()))
                 .tipoCobro(mapToTipoCobroResponse(detalleProducto.getTipoCobro()))
                 .descripcion(detalleProducto.getDescripcion())
                 .estatus(detalleProducto.getEstatus())

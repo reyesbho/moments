@@ -57,11 +57,6 @@ public class DetalleProductoService {
         //validate producto
         Producto producto = this.productoRepository.findById(detalleProductoRequest.getProducto())
                 .orElseThrow(() -> new EntityNotFoundException("Error al validar el producto"));
-        //validate sabor
-        Sabor sabor =  this.saborRepository.findById(detalleProductoRequest.getSabor()).orElse(null);
-        //validate tipoProducto
-        TipoProducto tipoProducto = this.tipoProductoRepository.findById(detalleProductoRequest.getTipoProducto())
-                .orElseThrow(() -> new EntityNotFoundException("Error al validar el tipo producto"));
         //validate tipo cobro
         TipoCobro tipoCobro = this.tipoCobroRepository.findById(detalleProductoRequest.getTipoCobro())
                 .orElseThrow(() -> new EntityNotFoundException("Error al validar el tipo cobro"));
@@ -72,8 +67,6 @@ public class DetalleProductoService {
         DetalleProducto detalleProducto = DetalleProducto.builder()
                 .producto(producto)
                 .size(tamano)
-                .sabor(sabor)
-                .tipoProducto(tipoProducto)
                 .tipoCobro(tipoCobro)
                 .descripcion(detalleProductoRequest.getDescripcion())
                 .estatus(Boolean.TRUE)
