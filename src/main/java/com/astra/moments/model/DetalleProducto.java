@@ -30,7 +30,7 @@ public class DetalleProducto {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_tipo_cobro", referencedColumnName = "id_tipo_cobro", nullable = false)
     private TipoCobro tipoCobro;
-    @Column(name = "descripcion" , nullable = false)
+    @Column(name = "descripcion" )
     private String descripcion;
     @Column(name = "estatus" , nullable = false)
     private Boolean estatus;

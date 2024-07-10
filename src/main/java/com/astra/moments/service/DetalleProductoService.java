@@ -2,6 +2,7 @@ package com.astra.moments.service;
 
 import com.astra.moments.dto.DetalleProductoRequest;
 import com.astra.moments.dto.DetalleProductoResponse;
+import com.astra.moments.dto.SaborResponse;
 import com.astra.moments.exception.EntityNotFoundException;
 import com.astra.moments.model.*;
 import com.astra.moments.repository.*;
@@ -74,6 +75,32 @@ public class DetalleProductoService {
                 .fechaRegistro(new Date())
                 .fechaActualizacion(null)
                 .build();
+        this.detalleProductoRepository.save(detalleProducto);
+        return MapObject.mapToDetalleProductoResponse(detalleProducto);
+    }
+
+
+    @Transactional
+    public void deleteDetalleProducto(Long idDetalleProducto){
+        Optional<DetalleProducto> optionalDetalleProducto = this.detalleProductoRepository.findById(idDetalleProducto);
+        if (optionalDetalleProducto.isEmpty()){
+            throw new EntityNotFoundException("Error al buscar el detalle del producto");
+        }
+        try{
+            this.detalleProductoRepository.delete(optionalDetalleProducto.get());
+        }catch (Exception e){
+            throw new RuntimeException("Error al eliminar el detalle del producto");
+        }
+    }
+
+    @Transactional
+    public DetalleProductoResponse updateStatus(Long idDetalleProducto, Boolean status){
+        Optional<DetalleProducto> optionalDetalleProducto = this.detalleProductoRepository.findById(idDetalleProducto);
+        if (optionalDetalleProducto.isEmpty()){
+            throw new EntityNotFoundException("Error al buscar el detalle del producto");
+        }
+        DetalleProducto detalleProducto = optionalDetalleProducto.get();
+        detalleProducto.setEstatus(status);
         this.detalleProductoRepository.save(detalleProducto);
         return MapObject.mapToDetalleProductoResponse(detalleProducto);
     }

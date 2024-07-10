@@ -2,6 +2,7 @@ package com.astra.moments.controller;
 
 import com.astra.moments.dto.DetalleProductoRequest;
 import com.astra.moments.dto.DetalleProductoResponse;
+import com.astra.moments.dto.SaborResponse;
 import com.astra.moments.service.DetalleProductoService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,5 +35,18 @@ public class DetalleProductoController {
     public ResponseEntity<DetalleProductoResponse> createDetalletProducto(@RequestBody DetalleProductoRequest detalleProductoRequest) throws Exception {
         DetalleProductoResponse response = this.detalleProductoService.createDetalleProducto(detalleProductoRequest);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+
+    @DeleteMapping("/{idDetalleProducto}")
+    public ResponseEntity deleteDetalleProducto(@PathVariable("idDetalleProducto") Long idDetalleProducto){
+        this.detalleProductoService.deleteDetalleProducto(idDetalleProducto);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PutMapping("/{idDetalleProducto}/{estatus}")
+    public ResponseEntity<DetalleProductoResponse> updateStatus(@PathVariable("idDetalleProducto") Long idDetalleProducto, @PathVariable("estatus") boolean estatus){
+        DetalleProductoResponse detalleProductoResponse = this.detalleProductoService.updateStatus(idDetalleProducto, estatus);
+        return new ResponseEntity<>(detalleProductoResponse, HttpStatus.OK);
     }
 }
