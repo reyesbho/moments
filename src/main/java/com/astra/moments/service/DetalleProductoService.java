@@ -56,13 +56,13 @@ public class DetalleProductoService {
     @Transactional
     public DetalleProductoResponse createDetalleProducto(DetalleProductoRequest detalleProductoRequest) throws Exception {
         //validate producto
-        Producto producto = this.productoRepository.findById(detalleProductoRequest.getProducto())
+        Producto producto = this.productoRepository.findById(detalleProductoRequest.getIdProducto())
                 .orElseThrow(() -> new EntityNotFoundException("Error al validar el producto"));
         //validate tipo cobro
-        TipoCobro tipoCobro = this.tipoCobroRepository.findById(detalleProductoRequest.getTipoCobro())
+        TipoCobro tipoCobro = this.tipoCobroRepository.findById(detalleProductoRequest.getIdTipoCobro())
                 .orElseThrow(() -> new EntityNotFoundException("Error al validar el tipo cobro"));
         //validate size
-        SizeProducto tamano = this.sizeProductoRepository.findById(detalleProductoRequest.getSize())
+        SizeProducto tamano = this.sizeProductoRepository.findById(detalleProductoRequest.getIdSize())
                 .orElseThrow(() -> new EntityNotFoundException("Error al validar el tamaño"));
 
         DetalleProducto detalleProducto = DetalleProducto.builder()

@@ -11,11 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DetalleProductoRequest {
 
-    private Long producto;
-    private Long size;
-    private Long tipoCobro;
+    private Long idProducto;
+    private Long idSize;
+    private Long idTipoCobro;
     private String descripcion;
-    private String estatus;
     private Float precio;
 
 }
