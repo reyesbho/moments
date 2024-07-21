@@ -2,7 +2,6 @@ package com.astra.moments.controller;
 
 import com.astra.moments.dto.DetalleProductoRequest;
 import com.astra.moments.dto.DetalleProductoResponse;
-import com.astra.moments.dto.SaborResponse;
 import com.astra.moments.service.DetalleProductoService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
