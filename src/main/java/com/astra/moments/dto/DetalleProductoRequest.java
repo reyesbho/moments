@@ -16,5 +16,7 @@ public class DetalleProductoRequest {
     private Long idTipoCobro;
     private String descripcion;
     private Float precio;
+    private String imagen;
+    private String comentarios;
 
 }

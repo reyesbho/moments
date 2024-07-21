@@ -27,6 +27,8 @@ public class Producto {
     private Boolean estatus;
     @Column(name = "imagen" , nullable = false)
     private String imagen;
+    @Column(name = "is_completed" , nullable = false)
+    private boolean isCompleted;
 
     public Producto(Long idProducto){
         this.id = idProducto;

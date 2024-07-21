@@ -22,28 +22,22 @@ public class DetalleProductoService {
 
     private DetalleProductoRepository detalleProductoRepository;
     private ProductoRepository productoRepository;
-    private SaborRepository saborRepository;
     private TipoCobroRepository tipoCobroRepository;
-    private TipoProductoRepository tipoProductoRepository;
     private SizeProductoRepository sizeProductoRepository;
 
     DetalleProductoService( DetalleProductoRepository detalleProductoRepository,
-                            ProductoRepository productoRepository,SaborRepository saborRepository,
+                            ProductoRepository productoRepository,
                             TipoCobroRepository tipoCobroRepository,
-                            TipoProductoRepository tipoProductoRepository,
                             SizeProductoRepository sizeProductoRepository){
         this.detalleProductoRepository = detalleProductoRepository;
         this.productoRepository = productoRepository;
-        this.saborRepository = saborRepository;
         this.tipoCobroRepository = tipoCobroRepository;
-        this.tipoProductoRepository = tipoProductoRepository;
         this.sizeProductoRepository = sizeProductoRepository;
     }
 
     @ReadOnlyProperty
     public Page<DetalleProductoResponse> getDetalleProductos(Optional<String> estatus, Pageable pageRequest){
         Page<DetalleProducto> detalleProductosPage = null;
-        Page<DetalleProductoResponse> detalleProductoResponse = null;
 
         if (estatus.isPresent()){
             detalleProductosPage = this.detalleProductoRepository.findByEstatus(estatus.get(), pageRequest);
@@ -72,8 +66,10 @@ public class DetalleProductoService {
                 .descripcion(detalleProductoRequest.getDescripcion())
                 .estatus(Boolean.TRUE)
                 .precio(detalleProductoRequest.getPrecio())
+                .imagen(detalleProductoRequest.getImagen())
                 .fechaRegistro(new Date())
                 .fechaActualizacion(null)
+                .comentarios(detalleProductoRequest.getComentarios())
                 .build();
         this.detalleProductoRepository.save(detalleProducto);
         return MapObject.mapToDetalleProductoResponse(detalleProducto);

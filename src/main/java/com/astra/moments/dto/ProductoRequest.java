@@ -15,4 +15,5 @@ public class ProductoRequest {
     private String descripcion;
     private Boolean estatus;
     private String imagen;
+    private boolean isCompleted;
 }

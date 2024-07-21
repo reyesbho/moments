@@ -40,10 +40,10 @@ public class ProductoPedido {
     private Date fechaActualizacion;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_sabor", referencedColumnName = "id_sabor", nullable = true)
+    @JoinColumn(name = "id_sabor", referencedColumnName = "id_sabor")
     private Sabor sabor;
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_tipo_producto", referencedColumnName = "id_tipo_producto", nullable = false)
+    @JoinColumn(name = "id_tipo_producto", referencedColumnName = "id_tipo_producto")
     private TipoProducto tipoProducto;
     @Column(name = "total", nullable = false)
     private Float total;

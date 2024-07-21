@@ -73,6 +73,7 @@ public class ProductoService {
                 .descripcion(productoRequest.getDescripcion())
                 .estatus(Boolean.TRUE)
                 .imagen(productoRequest.getImagen())
+                .isCompleted(productoRequest.isCompleted())
                 .build();
 
         this.productoRepository.save(producto);

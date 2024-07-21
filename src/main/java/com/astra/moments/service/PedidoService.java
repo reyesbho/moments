@@ -192,7 +192,7 @@ public class PedidoService {
         Sabor sabor =  this.saborRepository.findById(productoDto.getIdSabor()).orElse(null);
         //validate tipoProducto
         TipoProducto tipoProducto = this.tipoProductoRepository.findById(productoDto.getIdTipoProducto())
-                .orElseThrow(() -> new EntityNotFoundException("Error al validar el tipo producto"));
+                .orElse(null);
         // total producto
         Float subTotalProduct = detalleProducto.getPrecio() * productoDto.getCantidad();
         Float totalProducto = subTotalProduct - productoDto.getDescuento();

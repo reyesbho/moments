@@ -40,6 +40,10 @@ public class DetalleProducto {
     private Date fechaRegistro;
     @Column(name = "fecha_actualizacion")
     private Date fechaActualizacion;
+    @Column(name = "imagen")
+    private String imagen;
+    @Column(name = "comentarios" )
+    private String comentarios;
 
     public DetalleProducto(Long id){
         this.id = id;

@@ -22,6 +22,8 @@ public class DetalleProductoResponse {
     private Float precio;
     private Date fechaRegistro;
     private Date fechaActualizacion;
+    private String imagen;
+    private String comentarios;
 
     public DetalleProductoResponse(Long id){
         this.id = id;

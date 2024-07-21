@@ -55,6 +55,8 @@ public class MapObject {
 
 
     public static TipoProductoResponse mapToTipoProductoResponse(TipoProducto tipoProducto){
+        if (Objects.isNull(tipoProducto))
+            return null;
         return TipoProductoResponse.builder()
                 .id(tipoProducto.getId())
                 .clave(tipoProducto.getClave())
@@ -81,6 +83,7 @@ public class MapObject {
                 .estatus(producto.getEstatus())
                 .descripcion(producto.getDescripcion())
                 .imagen(producto.getImagen())
+                .isCompleted(producto.isCompleted())
                 .build();
     }
 
@@ -114,6 +117,8 @@ public class MapObject {
                 .precio(detalleProducto.getPrecio())
                 .fechaRegistro(detalleProducto.getFechaRegistro())
                 .fechaActualizacion(detalleProducto.getFechaActualizacion())
+                .imagen(detalleProducto.getImagen())
+                .comentarios(detalleProducto.getComentarios())
                 .build();
     }
 
