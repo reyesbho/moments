@@ -11,5 +11,6 @@ public class TipoProductoRequest {
     private Long id;
     private String clave;
     private String descripcion;
+    private String tags;
 
 }

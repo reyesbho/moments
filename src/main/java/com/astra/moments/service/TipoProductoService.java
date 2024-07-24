@@ -62,6 +62,7 @@ public class TipoProductoService {
                 .clave(tipoProductoRequest.getClave())
                 .descripcion(tipoProductoRequest.getDescripcion())
                 .estatus(Boolean.TRUE)
+                .tags(tipoProductoRequest.getTags())
                 .build();
         this.tipoProductoRepository.save(tipoProducto);
         return MapObject.mapToTipoProductoResponse(tipoProducto);

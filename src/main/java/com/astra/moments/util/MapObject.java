@@ -62,6 +62,7 @@ public class MapObject {
                 .clave(tipoProducto.getClave())
                 .descripcion(tipoProducto.getDescripcion())
                 .estatus(tipoProducto.getEstatus())
+                .tags(tipoProducto.getTags())
                 .build();
     }
 
