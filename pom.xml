@@ -86,6 +86,20 @@
 			<version>5.12.0</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.awspring.cloud/spring-cloud-aws-starter -->
+		<dependency>
+			<groupId>io.awspring.cloud</groupId>
+			<artifactId>spring-cloud-aws-starter</artifactId>
+			<version>3.2.0-M1</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/io.awspring.cloud/spring-cloud-aws-sns -->
+		<dependency>
+			<groupId>io.awspring.cloud</groupId>
+			<artifactId>spring-cloud-aws-sns</artifactId>
+			<version>3.2.0-M1</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
