@@ -23,6 +23,8 @@ public class Sabor {
     private String descripcion;
     @Column(name = "estatus", nullable = false)
     private Boolean estatus;
+    @Column(name = "tags")
+    private String tags;
 
     public Sabor(Long idSabor){
         this.id = idSabor;

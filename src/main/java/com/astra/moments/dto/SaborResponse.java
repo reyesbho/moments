@@ -14,4 +14,5 @@ public class SaborResponse {
     private String clave;
     private String descripcion;
     private Boolean estatus;
+    private String tags;
 }

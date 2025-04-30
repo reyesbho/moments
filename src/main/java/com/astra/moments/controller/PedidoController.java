@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -33,7 +34,7 @@ public class PedidoController {
     }
 
     @GetMapping("")
-    public ResponseEntity<Page<PedidoResponse>> getPedidos(@RequestParam(name = "estatus", required = false) Optional<String> estatus,
+    public ResponseEntity<Page<PedidoResponse>> getPedidos(@RequestParam(name = "estatus", required = true) String estatus,
                                                            @RequestParam(name = "dateInit", required = false) String dateInit,
                                                            @RequestParam(name = "dateEnd", required = false) String dateEnd,
                                                            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
@@ -62,7 +63,7 @@ public class PedidoController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<PedidoResponse> addPedido(@RequestBody PedidoRequest pedidoRequest){
+    public ResponseEntity<PedidoResponse> addPedido(@RequestBody @Validated PedidoRequest pedidoRequest){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
         return  new ResponseEntity<>(this.pedidoService.addPedido(pedidoRequest, currentUser), HttpStatus.CREATED);

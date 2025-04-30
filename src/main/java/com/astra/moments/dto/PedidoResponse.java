@@ -22,6 +22,5 @@ public class PedidoResponse  implements Serializable {
     private Date fechaRegistro;
     private Date fechaActualizacion;
     private ClienteResponse cliente;
-    private Integer numProductos;
     private String registradoPor;
 }

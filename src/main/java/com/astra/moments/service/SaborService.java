@@ -62,6 +62,7 @@ public class SaborService {
                 .clave(saborRequest.getClave())
                 .descripcion(saborRequest.getDescripcion())
                 .estatus(Boolean.TRUE)
+                .tags(saborRequest.getTags())
                 .build();
         this.saborRepository.save(sabor);
         return MapObject.mapToSaborResponse(sabor);

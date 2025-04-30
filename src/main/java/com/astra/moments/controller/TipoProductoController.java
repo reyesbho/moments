@@ -5,6 +5,7 @@ import com.astra.moments.dto.TipoProductoResponse;
 import com.astra.moments.service.TipoProductoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class TipoProductoController {
     }
 
     @PostMapping("")
-    public ResponseEntity<TipoProductoResponse> createTipoProducto(@RequestBody TipoProductoRequest tipoProductoRequest){
+    public ResponseEntity<TipoProductoResponse> createTipoProducto(@RequestBody @Validated TipoProductoRequest tipoProductoRequest){
         return new ResponseEntity<>(this.tipoProductoService.addTipoProducto(tipoProductoRequest), HttpStatus.CREATED);
     }
 }

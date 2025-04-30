@@ -3,14 +3,8 @@ package com.astra.moments.service;
 import com.astra.moments.dto.DetalleProductoRequest;
 import com.astra.moments.dto.DetalleProductoResponse;
 import com.astra.moments.exception.EntityNotFoundException;
-import com.astra.moments.model.DetalleProducto;
-import com.astra.moments.model.Producto;
-import com.astra.moments.model.SizeProducto;
-import com.astra.moments.model.TipoCobro;
-import com.astra.moments.repository.DetalleProductoRepository;
-import com.astra.moments.repository.ProductoRepository;
-import com.astra.moments.repository.SizeProductoRepository;
-import com.astra.moments.repository.TipoCobroRepository;
+import com.astra.moments.model.*;
+import com.astra.moments.repository.*;
 import com.astra.moments.util.MapObject;
 import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.domain.Page;
@@ -20,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -27,17 +22,21 @@ public class DetalleProductoService {
 
     private DetalleProductoRepository detalleProductoRepository;
     private ProductoRepository productoRepository;
-    private TipoCobroRepository tipoCobroRepository;
     private SizeProductoRepository sizeProductoRepository;
+    private SaborRepository saborRepository;
+    private TipoProductoRepository tipoProductoRepository;
 
     DetalleProductoService( DetalleProductoRepository detalleProductoRepository,
                             ProductoRepository productoRepository,
-                            TipoCobroRepository tipoCobroRepository,
-                            SizeProductoRepository sizeProductoRepository){
+                            SizeProductoRepository sizeProductoRepository,
+                            SaborRepository saborRepository,
+                            TipoProductoRepository tipoProductoRepository) {
         this.detalleProductoRepository = detalleProductoRepository;
         this.productoRepository = productoRepository;
-        this.tipoCobroRepository = tipoCobroRepository;
         this.sizeProductoRepository = sizeProductoRepository;
+        this.saborRepository = saborRepository;
+        this.tipoProductoRepository = tipoProductoRepository;
+
     }
 
     @ReadOnlyProperty
@@ -57,9 +56,16 @@ public class DetalleProductoService {
         //validate producto
         Producto producto = this.productoRepository.findById(detalleProductoRequest.getIdProducto())
                 .orElseThrow(() -> new EntityNotFoundException("Error al validar el producto"));
-        //validate tipo cobro
-        TipoCobro tipoCobro = this.tipoCobroRepository.findById(detalleProductoRequest.getIdTipoCobro())
-                .orElseThrow(() -> new EntityNotFoundException("Error al validar el tipo cobro"));
+        //validate sabor
+        Sabor sabor = Optional.ofNullable(detalleProductoRequest.getIdSabor())
+                .flatMap(saborRepository::findById)
+                .orElse(null);
+
+        //validate TipoProducto
+        TipoProducto tipoProducto = Optional.ofNullable(detalleProductoRequest.getIdTipoProducto())
+                .flatMap(tipoProductoRepository::findById)
+                .orElse(null);
+
         //validate size
         SizeProducto tamano = this.sizeProductoRepository.findById(detalleProductoRequest.getIdSize())
                 .orElseThrow(() -> new EntityNotFoundException("Error al validar el tamaño"));
@@ -67,7 +73,8 @@ public class DetalleProductoService {
         DetalleProducto detalleProducto = DetalleProducto.builder()
                 .producto(producto)
                 .size(tamano)
-                .tipoCobro(tipoCobro)
+                .sabor(sabor)
+                .tipoProducto(tipoProducto)
                 .descripcion(detalleProductoRequest.getDescripcion())
                 .estatus(Boolean.TRUE)
                 .precio(detalleProductoRequest.getPrecio())

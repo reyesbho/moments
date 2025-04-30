@@ -1,5 +1,7 @@
 package com.astra.moments.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,8 +17,10 @@ import java.util.Date;
 public class PedidoRequest {
 
     private Long idPedido;
-    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm")
-    private Date fechaEntrega;
+    private long fechaEntrega;
+    @NotNull
+    @NotBlank
     private String lugarEntrega;
+    @NotNull
     private ClienteResponse cliente;
 }
