@@ -55,7 +55,6 @@ class PedidoControllerTest {
         pedido1 = PedidoResponse.builder().id(1l).fechaEntrega(new Date("30/06/2024 16:00:00"))
                 .lugarEntrega("Tacahua").estatus(EstatusEnum.BACKLOG.toString()).total(200f).fechaRegistro(new Date())
                 .fechaActualizacion(null)
-                .numProductos(0)
                 .registradoPor("Reyes")
                 .cliente(ClienteResponse.builder().id(1l).build())
                 .build();
@@ -63,21 +62,18 @@ class PedidoControllerTest {
         pedido2 = PedidoResponse.builder().id(2l).fechaEntrega(new Date("30/07/2024 16:00:00"))
                 .lugarEntrega("Tacahua").estatus(EstatusEnum.DONE.toString()).total(500f).fechaRegistro(new Date())
                 .fechaActualizacion(null)
-                .numProductos(0)
                 .registradoPor("Reyes")
                 .cliente(ClienteResponse.builder().id(1l).build())
                 .build();
         pedido3 = PedidoResponse.builder().id(3l).fechaEntrega(new Date("20/06/2024  08:00:00"))
                 .lugarEntrega("Tacahua").estatus(EstatusEnum.CANCELED.toString()).total(1200f).fechaRegistro(new Date())
                 .fechaActualizacion(null)
-                .numProductos(0)
                 .registradoPor("Reyes")
                 .cliente(ClienteResponse.builder().id(1l).build())
                 .build();
         pedido4 = PedidoResponse.builder().id(4l).fechaEntrega(new Date("25/06/2024 20:00:00"))
                 .lugarEntrega("Tacahua").estatus(EstatusEnum.BACKLOG.toString()).total(100f).fechaRegistro(new Date())
                 .fechaActualizacion(null)
-                .numProductos(0)
                 .registradoPor("Reyes")
                 .cliente(ClienteResponse.builder().id(1l).build())
                 .build();
@@ -109,7 +105,7 @@ class PedidoControllerTest {
         SecurityContextHolder.setContext(securityContext);
 
         PedidoRequest pedidoRequest = PedidoRequest.builder()
-                .fechaEntrega(new Date())
+                .fechaEntrega(1745164837L)
                 .lugarEntrega("Tacahua")
                 .cliente(ClienteResponse.builder().id(1l).build())
                 .build();

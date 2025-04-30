@@ -1,5 +1,6 @@
 package com.astra.moments.service;
 
+import com.astra.moments.dto.ClienteRequest;
 import com.astra.moments.dto.ClienteResponse;
 import com.astra.moments.model.Cliente;
 import com.astra.moments.repository.ClienteRepository;
@@ -25,6 +26,17 @@ public class ClienteService {
     public List<ClienteResponse> getClientes(String search){
         List<Cliente> clienteList = this.clienteRepository.findByNombreContainingIgnoreCaseOrApellidoPaternoContainingIgnoreCase(search, search);
         return  clienteList.stream().map(MapObject::mapToClienteResponse).collect(Collectors.toList());
+    }
+
+    public ClienteResponse addCliente(ClienteRequest clienteRequest){
+        Cliente cliente = Cliente.builder()
+                .nombre(clienteRequest.getNombre())
+                .apellidoPaterno(clienteRequest.getApellidoPaterno())
+                .apellidoMaterno(clienteRequest.getApellidoMaterno())
+                .direccion(clienteRequest.getDireccion())
+                .build();
+          this.clienteRepository.save(cliente);
+          return MapObject.mapToClienteResponse(cliente);
     }
 
 }

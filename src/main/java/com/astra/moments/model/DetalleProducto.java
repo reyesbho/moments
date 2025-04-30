@@ -16,7 +16,6 @@ import java.util.Date;
 @Table(name = "cat_detalle_producto", schema = "public")
 public class DetalleProducto {
 
-
     @Id
     @Column(name = "id_detalle_producto")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +26,16 @@ public class DetalleProducto {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_size", referencedColumnName = "id_size", nullable = false)
     private SizeProducto size;
+
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_tipo_cobro", referencedColumnName = "id_tipo_cobro", nullable = false)
-    private TipoCobro tipoCobro;
-    @Column(name = "descripcion" , nullable = false)
+    @JoinColumn(name = "id_sabor", referencedColumnName = "id_sabor", nullable = true)
+    private Sabor sabor;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_tipo_producto", referencedColumnName = "id_tipo_producto", nullable = true)
+    private TipoProducto tipoProducto;
+
+    @Column(name = "descripcion" )
     private String descripcion;
     @Column(name = "estatus" , nullable = false)
     private Boolean estatus;
@@ -40,6 +45,10 @@ public class DetalleProducto {
     private Date fechaRegistro;
     @Column(name = "fecha_actualizacion")
     private Date fechaActualizacion;
+    @Column(name = "imagen")
+    private String imagen;
+    @Column(name = "comentarios" )
+    private String comentarios;
 
     public DetalleProducto(Long id){
         this.id = id;

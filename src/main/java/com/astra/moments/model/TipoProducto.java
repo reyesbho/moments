@@ -27,6 +27,9 @@ public class TipoProducto {
     @Column(name = "estatus")
     private Boolean estatus;
 
+    @Column(name = "tags")
+    private String tags;
+
 
     public TipoProducto(Long idProducto){
         this.id = idProducto;

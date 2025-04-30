@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -31,8 +32,21 @@ public class DetalleProductoController {
     }
 
     @PostMapping("")
-    public ResponseEntity<DetalleProductoResponse> createDetalletProducto(@RequestBody DetalleProductoRequest detalleProductoRequest) throws Exception {
-        DetalleProductoResponse response = this.detalleProductoService.createDetalleProducto(detalleProductoRequest);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<DetalleProductoResponse> createDetalletProducto(@RequestBody @Validated DetalleProductoRequest detalleProductoRequest) throws Exception {
+            DetalleProductoResponse response = this.detalleProductoService.createDetalleProducto(detalleProductoRequest);
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+
+    @DeleteMapping("/{idDetalleProducto}")
+    public ResponseEntity deleteDetalleProducto(@PathVariable("idDetalleProducto") Long idDetalleProducto){
+        this.detalleProductoService.deleteDetalleProducto(idDetalleProducto);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PutMapping("/{idDetalleProducto}/{estatus}")
+    public ResponseEntity<DetalleProductoResponse> updateStatus(@PathVariable("idDetalleProducto") Long idDetalleProducto, @PathVariable("estatus") boolean estatus){
+        DetalleProductoResponse detalleProductoResponse = this.detalleProductoService.updateStatus(idDetalleProducto, estatus);
+        return new ResponseEntity<>(detalleProductoResponse, HttpStatus.OK);
     }
 }

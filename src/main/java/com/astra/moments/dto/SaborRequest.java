@@ -1,5 +1,7 @@
 package com.astra.moments.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +12,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SaborRequest {
-    private Long id;
+    @NotBlank
+    @NotNull
     private String clave;
+    @NotBlank
+    @NotNull
     private String descripcion;
+    private String tags;
 }

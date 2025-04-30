@@ -8,6 +8,7 @@ import com.astra.moments.exception.EntityNotFoundException;
 import com.astra.moments.model.*;
 import com.astra.moments.repository.*;
 import com.astra.moments.util.EstatusEnum;
+import com.astra.moments.util.EstatusPagoEnum;
 import com.astra.moments.util.MapObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,12 +44,12 @@ public class PedidoService {
         this.tipoProductoRepository = tipoProductoRepository;
     }
 
-    public Page<PedidoResponse> getPedidos(Optional<String> estatus,String dateInit, String dateEnd, Pageable pageable) throws ParseException {
+    public Page<PedidoResponse> getPedidos(String estatus,String dateInit, String dateEnd, Pageable pageable) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ROOT);
         Date dateInitFilter = null;
         Date dateEndFilter = null;
         boolean hasFilterDate = true;
-        boolean isSearchAll = estatus.isPresent() && estatus.get().equalsIgnoreCase("ALL");
+        boolean isSearchAll = estatus.equalsIgnoreCase("ALL");
         if(StringUtils.hasText(dateInit) && StringUtils.hasText(dateEnd)){
             Date dateInitAux = formatter.parse(dateInit);
             Date dateEndAux = formatter.parse(dateEnd);
@@ -79,10 +80,10 @@ public class PedidoService {
             pagePedidos = this.pedidoRepository.findByFechaEntregaBetween(dateInitFilter, dateEndFilter, pageable);
         }
         if(!isSearchAll && hasFilterDate){
-            pagePedidos = this.pedidoRepository.findByEstatusAndFechaEntregaBetween(estatus.get(),dateInitFilter, dateEndFilter, pageable);
+            pagePedidos = this.pedidoRepository.findByEstatusAndFechaEntregaBetween(estatus,dateInitFilter, dateEndFilter, pageable);
         }
         if(!isSearchAll && !hasFilterDate){
-            pagePedidos = this.pedidoRepository.findByEstatus(estatus.get(), pageable);
+            pagePedidos = this.pedidoRepository.findByEstatus(estatus, pageable);
         }
 
         return new PageImpl<>(pagePedidos.getContent().stream().map(MapObject::mapToPedidoResponse).toList(),
@@ -96,7 +97,7 @@ public class PedidoService {
 
 
     public List<ProductoPedidoResponse> getProductosByPedido(Long idPedido){
-        List<ProductoPedido> productos = this.productoPedidoRepository.findByIdPedido(idPedido);
+        List<PedidoProducto> productos = this.productoPedidoRepository.findByPedidoId(idPedido);
         return productos.stream().map(MapObject::mapToPedidoProductoResponse).toList();
     }
 
@@ -130,23 +131,21 @@ public class PedidoService {
                     .build();
             this.clienteRepository.save(cliente);
         }else{
-            Optional<Cliente> clienteOptional = this.clienteRepository.findById(newPedido.getCliente().getId());
-            cliente = clienteOptional.get();
+            cliente = this.clienteRepository.findById(newPedido.getCliente().getId()).orElse(null);
         }
 
         Pedido pedidoEntity = Pedido.builder()
-                .fechaEntrega(newPedido.getFechaEntrega())
+                .fechaEntrega(new Date(newPedido.getFechaEntrega()))
                 .lugarEntrega(newPedido.getLugarEntrega())
                 .estatus(EstatusEnum.INCOMPLETE.getValue())
+                .estatusPago(EstatusPagoEnum.PENDIENTE.getValue())
                 .total(0f)
                 .fechaRegistro(new Date())
                 .fechaActualizacion(null)
                 .cliente(cliente)
                 .registradoPor(currentUser.getUsername())
-                .numProductos(0)
                 .build();
         this.pedidoRepository.save(pedidoEntity);
-
         return MapObject.mapToPedidoResponse(pedidoEntity);
     }
 
@@ -173,7 +172,7 @@ public class PedidoService {
             cliente = clienteOptional.get();
         }
         //pedido
-        pedido.setFechaEntrega(newPedido.getFechaEntrega());
+        pedido.setFechaEntrega(new Date(newPedido.getFechaEntrega()));
         pedido.setLugarEntrega(newPedido.getLugarEntrega());
         this.pedidoRepository.save(pedido);
 
@@ -188,30 +187,20 @@ public class PedidoService {
         //validate detailProduct
         DetalleProducto detalleProducto =  this.detalleProductoRepository.findById(productoDto.getIdDetalleProducto())
                 .orElseThrow(() -> new EntityNotFoundException("Detalle de producto no encontrado"));
-        //validate sabor
-        Sabor sabor =  this.saborRepository.findById(productoDto.getIdSabor()).orElse(null);
-        //validate tipoProducto
-        TipoProducto tipoProducto = this.tipoProductoRepository.findById(productoDto.getIdTipoProducto())
-                .orElseThrow(() -> new EntityNotFoundException("Error al validar el tipo producto"));
         // total producto
         Float subTotalProduct = detalleProducto.getPrecio() * productoDto.getCantidad();
         Float totalProducto = subTotalProduct - productoDto.getDescuento();
         //total pedido
         Float totalPedido = pedidoEntity.getTotal() + totalProducto;
         pedidoEntity.setTotal(totalPedido);
-        //total products
-        Integer numProducts = pedidoEntity.getNumProductos() + 1 ;
-        pedidoEntity.setNumProductos(numProducts);
         // entity productoPedido
-        ProductoPedido productoPedido = ProductoPedido.builder()
-                .idPedido(idPedido)
+        PedidoProducto productoPedido = PedidoProducto.builder()
+                .pedido(pedidoEntity)
                 .detalleProducto(detalleProducto)
                 .comentarios(productoDto.getComentarios())
-                .sabor(sabor)
-                .tipoProducto(tipoProducto)
                 .cantidad(productoDto.getCantidad())
                 .fechaRegistro(new Date())
-                .total(totalProducto)
+                .subTotal(totalProducto)
                 .descuento(productoDto.getDescuento())
                 .build();
 
@@ -221,15 +210,15 @@ public class PedidoService {
 
     @Transactional
     public void deleteProductoPedido(Long idProductoPedido){
-        Optional<ProductoPedido> optionalProductoPedido = this.productoPedidoRepository.findById(idProductoPedido);
+        Optional<PedidoProducto> optionalProductoPedido = this.productoPedidoRepository.findById(idProductoPedido);
         if (optionalProductoPedido.isEmpty()){
             throw  new EntityNotFoundException("Error al buscar el producto");
         }
-        ProductoPedido productoPedido = optionalProductoPedido.get();
+        PedidoProducto productoPedido = optionalProductoPedido.get();
         //validate detailProduct
         DetalleProducto detalleProducto = productoPedido.getDetalleProducto();
         //pedido
-        Optional<Pedido> optionalPedido = this.pedidoRepository.findById(productoPedido.getIdPedido());
+        Optional<Pedido> optionalPedido = this.pedidoRepository.findById(productoPedido.getPedido().getId());
         if (optionalPedido.isEmpty()){
             throw new EntityNotFoundException("Pedido no encontrado");
         }
@@ -238,9 +227,6 @@ public class PedidoService {
         Float totalProducto = detalleProducto.getPrecio() * productoPedido.getCantidad();
         Float total = pedidoEntity.getTotal() - totalProducto;
         pedidoEntity.setTotal(total);
-        //total products
-        Integer numProducts = pedidoEntity.getNumProductos() - 1;
-        pedidoEntity.setNumProductos(numProducts);
         this.pedidoRepository.save(pedidoEntity);
         //delete
         this.productoPedidoRepository.delete(productoPedido);
@@ -255,7 +241,7 @@ public class PedidoService {
         }
         Pedido pedido = optionalPedido.get();
         //seach all products by pedido
-        List<ProductoPedido> productos = this.productoPedidoRepository.findByIdPedido(pedido.getId());
+        List<PedidoProducto> productos = this.productoPedidoRepository.findByPedidoId(pedido.getId());
         //delete all productoPedido
         this.productoPedidoRepository.deleteAll(productos);
         //delete pedido

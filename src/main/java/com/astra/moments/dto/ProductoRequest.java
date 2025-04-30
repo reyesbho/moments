@@ -1,27 +1,24 @@
 package com.astra.moments.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class DetalleProductoRequest {
-
+@Data
+@AllArgsConstructor
+public class ProductoRequest {
+    @NotBlank
     @NotNull
-    private Long idProducto;
+    private String clave;
+    @NotBlank
     @NotNull
-    private Long idSize;
-    private Long idSabor;
-    private Long idTipoProducto;
     private String descripcion;
-    @NotNull
-    private Float precio;
+    private Boolean estatus;
     private String imagen;
-    private String comentarios;
-
+    private boolean isCompleted;
 }

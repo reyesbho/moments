@@ -14,14 +14,15 @@ import java.util.Date;
 @Entity
 @Builder
 @Table(name = "pedido_producto")
-public class ProductoPedido {
+public class PedidoProducto {
     @Id
     @Column(name = "id_pedido_producto")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "id_pedido", nullable = false)
-    private Long idPedido;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_pedido", referencedColumnName = "id_pedido")
+    private Pedido pedido;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_detalle_producto", referencedColumnName = "id_detalle_producto")
@@ -39,14 +40,8 @@ public class ProductoPedido {
     @Column(name = "fecha_actualizacion")
     private Date fechaActualizacion;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_sabor", referencedColumnName = "id_sabor", nullable = true)
-    private Sabor sabor;
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_tipo_producto", referencedColumnName = "id_tipo_producto", nullable = false)
-    private TipoProducto tipoProducto;
-    @Column(name = "total", nullable = false)
-    private Float total;
+    @Column(name = "sub_total", nullable = false)
+    private Float subTotal;
     @Column(name = "descuento", nullable = false)
     private Float descuento;
 }

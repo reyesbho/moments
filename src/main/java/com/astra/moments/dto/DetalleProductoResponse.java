@@ -16,12 +16,15 @@ public class DetalleProductoResponse {
     private Long id;
     private ProductoResponse producto;
     private SizeProductoResponse size;
-    private TipoCobroResponse tipoCobro;
+    private SaborResponse sabor;
+    private TipoProductoResponse tipoProducto;
     private String descripcion;
     private Boolean estatus;
     private Float precio;
     private Date fechaRegistro;
     private Date fechaActualizacion;
+    private String imagen;
+    private String comentarios;
 
     public DetalleProductoResponse(Long id){
         this.id = id;

@@ -54,7 +54,6 @@ public class PedidoServiceTest {
         pedido1 = Pedido.builder().id(1l).fechaEntrega(new Date("30/06/2024 16:00:00"))
                 .lugarEntrega("Tacahua").estatus(EstatusEnum.BACKLOG.toString()).total(200f).fechaRegistro(new Date())
                 .fechaActualizacion(null)
-                .numProductos(0)
                 .registradoPor("Reyes")
                 .cliente(Cliente.builder().id(1l).build())
                 .build();
@@ -62,21 +61,18 @@ public class PedidoServiceTest {
         pedido2 = Pedido.builder().id(2l).fechaEntrega(new Date("30/07/2024 16:00:00"))
                 .lugarEntrega("Tacahua").estatus(EstatusEnum.DONE.toString()).total(500f).fechaRegistro(new Date())
                 .fechaActualizacion(null)
-                .numProductos(0)
                 .registradoPor("Reyes")
                 .cliente(Cliente.builder().id(1l).build())
                 .build();
         pedido3 = Pedido.builder().id(3l).fechaEntrega(new Date("20/06/2024 08:00:00"))
                 .lugarEntrega("Tacahua").estatus(EstatusEnum.CANCELED.toString()).total(1200f).fechaRegistro(new Date())
                 .fechaActualizacion(null)
-                .numProductos(0)
                 .registradoPor("Reyes")
                 .cliente(Cliente.builder().id(1l).build())
                 .build();
         pedido4 = Pedido.builder().id(4l).fechaEntrega(new Date("25/06/2024 20:00:00"))
                 .lugarEntrega("Tacahua").estatus(EstatusEnum.BACKLOG.toString()).total(100f).fechaRegistro(new Date())
                 .fechaActualizacion(null)
-                .numProductos(0)
                 .registradoPor("Reyes")
                 .cliente(Cliente.builder().id(1l).build())
                 .build();
@@ -89,7 +85,7 @@ public class PedidoServiceTest {
                 Mockito.when(pedidoRepository.findAll(Mockito.any(Pageable.class)))
                 .thenReturn(Mockito.mock(Page.class));
 
-        Page<PedidoResponse> savedPedidos = pedidoService.getPedidos(Optional.of("ALL"),null, null, Mockito.mock(PageRequest.class));
+        Page<PedidoResponse> savedPedidos = pedidoService.getPedidos("ALL",null, null, Mockito.mock(PageRequest.class));
 
         Assertions.assertNotNull(savedPedidos);
     }
@@ -102,7 +98,7 @@ public class PedidoServiceTest {
         Mockito.when(pedidoRepository.findByEstatus(Mockito.anyString(), Mockito.any(Pageable.class)))
                 .thenReturn(new PageImpl<>(Arrays.asList(pedido1, pedido4), pageable, 2));
 
-        Page<PedidoResponse> savedPedidos = pedidoService.getPedidos(Optional.of("BACKLOG"),null, null, pageable);
+        Page<PedidoResponse> savedPedidos = pedidoService.getPedidos("BACKLOG",null, null, pageable);
         Assertions.assertNotNull(savedPedidos);
         Assertions.assertEquals(savedPedidos.getContent().size(), 2);
     }
@@ -115,7 +111,7 @@ public class PedidoServiceTest {
         Mockito.when(pedidoRepository.findByFechaEntregaBetween(Mockito.any(Date.class), Mockito.any(Date.class), Mockito.any(PageRequest.class)))
                 .thenReturn(new PageImpl<>(Arrays.asList(pedido3, pedido4, pedido1), pageable, 3));
 
-        Page<PedidoResponse> savedPedidos = pedidoService.getPedidos(Optional.of("ALL"),"01-06-2011", "3-06-2011", pageable);
+        Page<PedidoResponse> savedPedidos = pedidoService.getPedidos("ALL","01-06-2011", "3-06-2011", pageable);
         Assertions.assertNotNull(savedPedidos);
         Assertions.assertEquals(savedPedidos.getContent().size(), 3);
     }
@@ -127,7 +123,7 @@ public class PedidoServiceTest {
         Mockito.when(pedidoRepository.findByEstatusAndFechaEntregaBetween(Mockito.anyString(),Mockito.any(Date.class), Mockito.any(Date.class), Mockito.any(PageRequest.class)))
                 .thenReturn(new PageImpl<>(Arrays.asList(pedido1, pedido4), pageable, 2));
 
-        Page<PedidoResponse> savedPedidos = pedidoService.getPedidos(Optional.of("BACKLOG"),"01-06-2011", "3-06-2011", pageable);
+        Page<PedidoResponse> savedPedidos = pedidoService.getPedidos("BACKLOG","01-06-2011", "3-06-2011", pageable);
         Assertions.assertNotNull(savedPedidos);
         Assertions.assertEquals(savedPedidos.getContent().size(), 2);
     }
@@ -146,7 +142,7 @@ public class PedidoServiceTest {
     @Test
     @DisplayName("PedidoService_getProductosByPedidoId_ReturnListProductoPedidoResponse")
     void getProductosByPedido(){
-        Mockito.when(productoPedidoRepository.findByIdPedido(Mockito.anyLong()))
+        Mockito.when(productoPedidoRepository.findByPedidoId(Mockito.anyLong()))
                 .thenReturn(Mockito.mock(List.class));
 
         List<ProductoPedidoResponse> productos = pedidoService.getProductosByPedido(2l);
@@ -166,7 +162,7 @@ public class PedidoServiceTest {
         ClienteResponse clienteRequest = ClienteResponse.builder()
                 .nombre("Reyes").apellidoPaterno("Bustamante").apellidoMaterno("Hernandez").direccion("Tacahua").build();
         PedidoRequest pedidoRequest = PedidoRequest.builder()
-                .fechaEntrega(new Date())
+                .fechaEntrega(1745164837L)
                 .lugarEntrega("Tacahua")
                 .cliente(clienteRequest)
                 .build();
@@ -247,12 +243,12 @@ public class PedidoServiceTest {
     @Test
     @DisplayName("PedidoService_deletePedido_NoReturn")
     void deletePedido(){
-        ProductoPedido productoPedido = ProductoPedido.builder()
-                .id(1l).idPedido(1l).detalleProducto(DetalleProducto.builder().id(1l).build())
+        PedidoProducto productoPedido = PedidoProducto.builder()
+                .id(1l).pedido(new Pedido(1l)).detalleProducto(DetalleProducto.builder().id(1l).build())
                 .comentarios(null).fechaRegistro(new Date())
                 .fechaActualizacion(new Date()).build();
 
-        Mockito.when(productoPedidoRepository.findByIdPedido(Mockito.anyLong()))
+        Mockito.when(productoPedidoRepository.findByPedidoId(Mockito.anyLong()))
                 .thenReturn(Arrays.asList(productoPedido));
         Mockito.when(pedidoRepository.findById(Mockito.anyLong()))
                 .thenReturn(Optional.of(pedido1));

@@ -2,21 +2,21 @@ package com.astra.moments.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class SizeProductoRequest {
+public class ClienteRequest {
     @NotBlank
     @NotNull
-    private String clave;
+    private String nombre;
     @NotBlank
     @NotNull
-    private String descripcion;
-
+    private String apellidoPaterno;
+    private String apellidoMaterno;
+    @NotBlank
+    @NotNull
+    private String direccion;
 }

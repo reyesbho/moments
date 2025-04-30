@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -21,28 +22,26 @@ public class DetalleProductoService {
 
     private DetalleProductoRepository detalleProductoRepository;
     private ProductoRepository productoRepository;
-    private SaborRepository saborRepository;
-    private TipoCobroRepository tipoCobroRepository;
-    private TipoProductoRepository tipoProductoRepository;
     private SizeProductoRepository sizeProductoRepository;
+    private SaborRepository saborRepository;
+    private TipoProductoRepository tipoProductoRepository;
 
     DetalleProductoService( DetalleProductoRepository detalleProductoRepository,
-                            ProductoRepository productoRepository,SaborRepository saborRepository,
-                            TipoCobroRepository tipoCobroRepository,
-                            TipoProductoRepository tipoProductoRepository,
-                            SizeProductoRepository sizeProductoRepository){
+                            ProductoRepository productoRepository,
+                            SizeProductoRepository sizeProductoRepository,
+                            SaborRepository saborRepository,
+                            TipoProductoRepository tipoProductoRepository) {
         this.detalleProductoRepository = detalleProductoRepository;
         this.productoRepository = productoRepository;
-        this.saborRepository = saborRepository;
-        this.tipoCobroRepository = tipoCobroRepository;
-        this.tipoProductoRepository = tipoProductoRepository;
         this.sizeProductoRepository = sizeProductoRepository;
+        this.saborRepository = saborRepository;
+        this.tipoProductoRepository = tipoProductoRepository;
+
     }
 
     @ReadOnlyProperty
     public Page<DetalleProductoResponse> getDetalleProductos(Optional<String> estatus, Pageable pageRequest){
         Page<DetalleProducto> detalleProductosPage = null;
-        Page<DetalleProductoResponse> detalleProductoResponse = null;
 
         if (estatus.isPresent()){
             detalleProductosPage = this.detalleProductoRepository.findByEstatus(estatus.get(), pageRequest);
@@ -55,25 +54,61 @@ public class DetalleProductoService {
     @Transactional
     public DetalleProductoResponse createDetalleProducto(DetalleProductoRequest detalleProductoRequest) throws Exception {
         //validate producto
-        Producto producto = this.productoRepository.findById(detalleProductoRequest.getProducto())
+        Producto producto = this.productoRepository.findById(detalleProductoRequest.getIdProducto())
                 .orElseThrow(() -> new EntityNotFoundException("Error al validar el producto"));
-        //validate tipo cobro
-        TipoCobro tipoCobro = this.tipoCobroRepository.findById(detalleProductoRequest.getTipoCobro())
-                .orElseThrow(() -> new EntityNotFoundException("Error al validar el tipo cobro"));
+        //validate sabor
+        Sabor sabor = Optional.ofNullable(detalleProductoRequest.getIdSabor())
+                .flatMap(saborRepository::findById)
+                .orElse(null);
+
+        //validate TipoProducto
+        TipoProducto tipoProducto = Optional.ofNullable(detalleProductoRequest.getIdTipoProducto())
+                .flatMap(tipoProductoRepository::findById)
+                .orElse(null);
+
         //validate size
-        SizeProducto tamano = this.sizeProductoRepository.findById(detalleProductoRequest.getSize())
+        SizeProducto tamano = this.sizeProductoRepository.findById(detalleProductoRequest.getIdSize())
                 .orElseThrow(() -> new EntityNotFoundException("Error al validar el tamaño"));
 
         DetalleProducto detalleProducto = DetalleProducto.builder()
                 .producto(producto)
                 .size(tamano)
-                .tipoCobro(tipoCobro)
+                .sabor(sabor)
+                .tipoProducto(tipoProducto)
                 .descripcion(detalleProductoRequest.getDescripcion())
                 .estatus(Boolean.TRUE)
                 .precio(detalleProductoRequest.getPrecio())
+                .imagen(detalleProductoRequest.getImagen())
                 .fechaRegistro(new Date())
                 .fechaActualizacion(null)
+                .comentarios(detalleProductoRequest.getComentarios())
                 .build();
+        this.detalleProductoRepository.save(detalleProducto);
+        return MapObject.mapToDetalleProductoResponse(detalleProducto);
+    }
+
+
+    @Transactional
+    public void deleteDetalleProducto(Long idDetalleProducto){
+        Optional<DetalleProducto> optionalDetalleProducto = this.detalleProductoRepository.findById(idDetalleProducto);
+        if (optionalDetalleProducto.isEmpty()){
+            throw new EntityNotFoundException("Error al buscar el detalle del producto");
+        }
+        try{
+            this.detalleProductoRepository.delete(optionalDetalleProducto.get());
+        }catch (Exception e){
+            throw new RuntimeException("Error al eliminar el detalle del producto");
+        }
+    }
+
+    @Transactional
+    public DetalleProductoResponse updateStatus(Long idDetalleProducto, Boolean status){
+        Optional<DetalleProducto> optionalDetalleProducto = this.detalleProductoRepository.findById(idDetalleProducto);
+        if (optionalDetalleProducto.isEmpty()){
+            throw new EntityNotFoundException("Error al buscar el detalle del producto");
+        }
+        DetalleProducto detalleProducto = optionalDetalleProducto.get();
+        detalleProducto.setEstatus(status);
         this.detalleProductoRepository.save(detalleProducto);
         return MapObject.mapToDetalleProductoResponse(detalleProducto);
     }

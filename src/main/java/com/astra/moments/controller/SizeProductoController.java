@@ -5,6 +5,7 @@ import com.astra.moments.dto.SizeProductoResponse;
 import com.astra.moments.service.SizeProductoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class SizeProductoController {
     }
 
     @PostMapping("")
-    public ResponseEntity<SizeProductoResponse> addSizeProduct(@RequestBody SizeProductoRequest sizeProductoRequest){
+    public ResponseEntity<SizeProductoResponse> addSizeProduct(@RequestBody @Validated SizeProductoRequest sizeProductoRequest){
         return  new ResponseEntity<>(this.sizeProductoService.addSizeProduct(sizeProductoRequest), HttpStatus.CREATED);
     }
 }
