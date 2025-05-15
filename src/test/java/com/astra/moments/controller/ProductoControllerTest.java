@@ -2,7 +2,6 @@ package com.astra.moments.controller;
 
 import com.astra.moments.config.JwtService;
 import com.astra.moments.dto.ProductoResponse;
-import com.astra.moments.dto.TipoProductoResponse;
 import com.astra.moments.service.ProductoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.CoreMatchers;
@@ -49,10 +48,6 @@ class ProductoControllerTest {
     private ProductoResponse producto2;
     private ProductoResponse producto3;
 
-    private TipoProductoResponse productoTipo;
-    private TipoProductoResponse productoTipo2;
-    private TipoProductoResponse productoTipo3;
-
     @BeforeEach
     void init(){
 
@@ -79,24 +74,6 @@ class ProductoControllerTest {
                 .imagen("https://algodulce.com.mx/cdn/shop/products/PINATEROCONFETTI_992x.jpg?v=1600198545")
                 .build();
 
-
-        productoTipo = TipoProductoResponse.builder()
-                .id(1l)
-                .clave("hawaiana")
-                .descripcion("Hawayana")
-                .estatus(Boolean.TRUE).build();
-
-        productoTipo2 = TipoProductoResponse.builder()
-                .id(2l)
-                .clave("peperoni")
-                .descripcion("Peperoni")
-                .estatus(Boolean.TRUE).build();
-
-        productoTipo3 = TipoProductoResponse.builder()
-                .id(3l)
-                .clave("mexicana")
-                .descripcion("Mexicana")
-                .estatus(Boolean.TRUE).build();
     }
 
 

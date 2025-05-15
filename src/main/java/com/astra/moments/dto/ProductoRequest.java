@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 public class ProductoRequest {
+    private long id;
     @NotBlank
     @NotNull
     private String clave;

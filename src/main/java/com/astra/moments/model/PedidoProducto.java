@@ -25,11 +25,15 @@ public class PedidoProducto {
     private Pedido pedido;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_detalle_producto", referencedColumnName = "id_detalle_producto")
-    private DetalleProducto detalleProducto;
+    @JoinColumn(name = "id_size", referencedColumnName = "id_size")
+    private SizeProducto sizeProducto;
 
-    @Column(name = "comentarios")
-    private String comentarios;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto")
+    private Producto producto;
+
+    @Column(name = "caracteristicas")
+    private String caracteristicas;
 
     @Column(name = "cantidad", nullable = false)
     private Long cantidad;
@@ -40,8 +44,6 @@ public class PedidoProducto {
     @Column(name = "fecha_actualizacion")
     private Date fechaActualizacion;
 
-    @Column(name = "sub_total", nullable = false)
-    private Float subTotal;
-    @Column(name = "descuento", nullable = false)
-    private Float descuento;
+    @Column(name = "precio", nullable = false)
+    private Float precio;
 }

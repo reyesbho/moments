@@ -14,6 +14,7 @@ public class SizeProductoResponse {
     private String clave;
     private String descripcion;
     private Boolean estatus;
+    private String tags;
 
     public SizeProductoResponse(Long id){
         this.id = id;

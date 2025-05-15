@@ -36,10 +36,6 @@ public class PedidoServiceTest {
     @Mock
     private ClienteRepository clienteRepository;
     @Mock
-    private SaborRepository saborRepository;
-    @Mock
-    private TipoProductoRepository tipoProductoRepository;
-    @Mock
     private ProductoRepository productoRepository;
     @InjectMocks
     private PedidoService pedidoService;
@@ -244,8 +240,9 @@ public class PedidoServiceTest {
     @DisplayName("PedidoService_deletePedido_NoReturn")
     void deletePedido(){
         PedidoProducto productoPedido = PedidoProducto.builder()
-                .id(1l).pedido(new Pedido(1l)).detalleProducto(DetalleProducto.builder().id(1l).build())
-                .comentarios(null).fechaRegistro(new Date())
+                .id(1l).pedido(new Pedido(1l)).pedido(new Pedido(1l))
+                .sizeProducto(new SizeProducto(1l))
+                .caracteristicas(null).fechaRegistro(new Date())
                 .fechaActualizacion(new Date()).build();
 
         Mockito.when(productoPedidoRepository.findByPedidoId(Mockito.anyLong()))
