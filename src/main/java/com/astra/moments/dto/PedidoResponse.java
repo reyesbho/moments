@@ -18,6 +18,7 @@ public class PedidoResponse  implements Serializable {
     private Date fechaEntrega;
     private String lugarEntrega;
     private String estatus;
+    private String estatusPago;
     private Float total;
     private Date fechaRegistro;
     private Date fechaActualizacion;

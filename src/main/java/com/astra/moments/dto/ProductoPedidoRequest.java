@@ -12,9 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProductoPedidoRequest {
     @NotNull
-    private Long idDetalleProducto;
-    private String comentarios;
+    private Long idProducto;
+    @NotNull
+    private Long idSize;
+    private String caracteristicas;
     private Long cantidad;
-    private Float subTotal;
-    private Float descuento;
+    private Float precio;
 }

@@ -14,11 +14,11 @@ import java.util.Date;
 public class ProductoPedidoResponse {
     private Long id;
     private Long idPedido;
-    private DetalleProductoResponse detalleProducto;
-    private String comentarios;
+    private SizeProductoResponse sizeProducto;
+    private ProductoResponse producto;
+    private String caracteristicas;
     private Long cantidad;
     private Date fechaRegistro;
     private Date fechaActualizacion;
-    private Float total;
-    private Float descuento;
+    private Float precio;
 }

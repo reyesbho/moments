@@ -2,9 +2,7 @@ package com.astra.moments.service;
 
 import com.astra.moments.dto.ProductoResponse;
 import com.astra.moments.model.Producto;
-import com.astra.moments.model.TipoProducto;
 import com.astra.moments.repository.ProductoRepository;
-import com.astra.moments.repository.TipoProductoRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -23,17 +21,12 @@ class ProductoServiceTest {
 
     @Mock
     private ProductoRepository productoRepository;
-    @Mock
-    private TipoProductoRepository tipoProductoRepository;
     @InjectMocks
     private ProductoService productoService;
     static Producto producto;
     static Producto producto2;
     static Producto producto3;
 
-    static TipoProducto tipoProducto;
-    static TipoProducto tipoProducto2;
-    static TipoProducto tipoProducto3;
 
     @BeforeAll
     public static void setUp() {
@@ -60,23 +53,6 @@ class ProductoServiceTest {
                 .imagen("https://algodulce.com.mx/cdn/shop/products/PINATEROCONFETTI_992x.jpg?v=1600198545")
                 .build();
 
-        tipoProducto = TipoProducto.builder()
-                .id(1l)
-                .clave("hawaiana")
-                .descripcion("Hawayana")
-                .estatus(Boolean.TRUE).build();
-
-        tipoProducto2 = TipoProducto.builder()
-                .id(2l)
-                .clave("peperoni")
-                .descripcion("Peperoni")
-                .estatus(Boolean.TRUE).build();
-
-        tipoProducto3 = TipoProducto.builder()
-                .id(3l)
-                .clave("mexicana")
-                .descripcion("Mexicana")
-                .estatus(Boolean.TRUE).build();
     }
 
 

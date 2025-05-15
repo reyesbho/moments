@@ -49,6 +49,7 @@ public class Pedido {
     @JoinColumn(name = "id_cliente", referencedColumnName = "id_cliente")
     private Cliente cliente;
 
+
     public Pedido(Long id){
         this.id = id;
     }

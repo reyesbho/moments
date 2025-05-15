@@ -20,6 +20,7 @@ public class MapObject {
                 .total(pedido.getTotal())
                 .fechaActualizacion(pedido.getFechaActualizacion())
                 .estatus(pedido.getEstatus())
+                .estatusPago(pedido.getEstatusPago())
                 .cliente(mapToClienteResponse(pedido.getCliente()))
                 .registradoPor(pedido.getRegistradoPor())
                 .build();
@@ -40,40 +41,16 @@ public class MapObject {
         return ProductoPedidoResponse.builder()
                 .id(pedidoProducto.getId())
                 .idPedido(pedidoProducto.getPedido().getId())
-                .detalleProducto(mapToDetalleProductoResponse(pedidoProducto.getDetalleProducto()))
-                .comentarios(pedidoProducto.getComentarios())
+                .sizeProducto(mapToSizeProductoResponse(pedidoProducto.getSizeProducto()))
+                .producto(mapToProductResponse(pedidoProducto.getProducto()))
+                .caracteristicas(pedidoProducto.getCaracteristicas())
                 .cantidad(pedidoProducto.getCantidad())
                 .fechaRegistro(pedidoProducto.getFechaRegistro())
                 .fechaActualizacion(pedidoProducto.getFechaActualizacion())
-                .total(pedidoProducto.getSubTotal())
-                .descuento(pedidoProducto.getDescuento())
+                .precio(pedidoProducto.getPrecio())
                 .build();
     }
 
-
-    public static TipoProductoResponse mapToTipoProductoResponse(TipoProducto tipoProducto){
-        if (Objects.isNull(tipoProducto))
-            return null;
-        return TipoProductoResponse.builder()
-                .id(tipoProducto.getId())
-                .clave(tipoProducto.getClave())
-                .descripcion(tipoProducto.getDescripcion())
-                .estatus(tipoProducto.getEstatus())
-                .tags(tipoProducto.getTags())
-                .build();
-    }
-
-    public static SaborResponse mapToSaborResponse(Sabor sabor){
-        if (Objects.isNull(sabor))
-            return new SaborResponse();
-        return SaborResponse.builder()
-                .id(sabor.getId())
-                .clave(sabor.getClave())
-                .descripcion(sabor.getDescripcion())
-                .estatus(sabor.getEstatus())
-                .tags(sabor.getTags())
-                .build();
-    }
 
     public static ProductoResponse mapToProductResponse(Producto producto){
         return ProductoResponse.builder()
@@ -93,25 +70,9 @@ public class MapObject {
                 .clave(sizeProducto.getClave())
                 .descripcion(sizeProducto.getDescripcion())
                 .estatus(sizeProducto.getEstatus())
+                .tags(sizeProducto.getTags())
                 .build();
     }
 
-
-    public static DetalleProductoResponse mapToDetalleProductoResponse(DetalleProducto detalleProducto){
-        return DetalleProductoResponse.builder()
-                .id(detalleProducto.getId())
-                .producto(mapToProductResponse(detalleProducto.getProducto()))
-                .size(mapToSizeProductoResponse(detalleProducto.getSize()))
-                .sabor(mapToSaborResponse(detalleProducto.getSabor()))
-                .tipoProducto(mapToTipoProductoResponse(detalleProducto.getTipoProducto()))
-                .descripcion(detalleProducto.getDescripcion())
-                .estatus(detalleProducto.getEstatus())
-                .precio(detalleProducto.getPrecio())
-                .fechaRegistro(detalleProducto.getFechaRegistro())
-                .fechaActualizacion(detalleProducto.getFechaActualizacion())
-                .imagen(detalleProducto.getImagen())
-                .comentarios(detalleProducto.getComentarios())
-                .build();
-    }
 
 }

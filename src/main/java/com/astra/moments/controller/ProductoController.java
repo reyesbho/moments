@@ -44,20 +44,21 @@ public class ProductoController {
 
     }
 
-    @PutMapping("/{idProducto}/{estatus}")
+    @PutMapping("/{idProducto}/estatus/{estatus}")
     public ResponseEntity<ProductoResponse> updateStatus(@PathVariable("idProducto") Long idSabor, @PathVariable("estatus") boolean estatus){
         ProductoResponse productoResponse = this.productoService.updateStatus(idSabor, estatus);
+        return new ResponseEntity<>(productoResponse, HttpStatus.OK);
+    }
+
+    @PutMapping("")
+    public ResponseEntity<ProductoResponse> updateProducto(@RequestBody ProductoRequest productoRequest){
+        ProductoResponse productoResponse = this.productoService.updateProducto(productoRequest);
         return new ResponseEntity<>(productoResponse, HttpStatus.OK);
     }
 
     @PostMapping("")
     public ResponseEntity<ProductoResponse> addProducto(@RequestBody @Validated ProductoRequest productoRequest){
         return new ResponseEntity<>(this.productoService.addProducto(productoRequest),HttpStatus.CREATED);
-    }
-
-    @GetMapping("/{id}/producto")
-    public ResponseEntity getDetailProducts(@PathVariable("id") Long idProducto){
-        return new ResponseEntity(this.productoService.getDetailProductsByProducto(idProducto), HttpStatus.OK);
     }
 
 }

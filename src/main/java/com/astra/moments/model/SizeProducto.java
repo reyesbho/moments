@@ -23,6 +23,8 @@ public class SizeProducto {
     private String descripcion;
     @Column(name = "estatus", nullable = false)
     private Boolean estatus;
+    @Column(name = "tags", nullable = false)
+    private String tags;
 
     public SizeProducto(Long id){
         this.id = id;

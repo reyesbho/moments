@@ -1,30 +1,26 @@
 package com.astra.moments.service;
 
-import com.astra.moments.dto.DetalleProductoResponse;
 import com.astra.moments.dto.ProductoRequest;
 import com.astra.moments.dto.ProductoResponse;
 import com.astra.moments.exception.EntityExistException;
 import com.astra.moments.exception.EntityNotFoundException;
-import com.astra.moments.model.DetalleProducto;
 import com.astra.moments.model.Producto;
-import com.astra.moments.repository.DetalleProductoRepository;
 import com.astra.moments.repository.ProductoRepository;
 import com.astra.moments.util.MapObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class ProductoService {
 
     private ProductoRepository productoRepository;
-    private DetalleProductoRepository detalleProductoRepository;
 
-    public ProductoService(ProductoRepository productoRepository, DetalleProductoRepository detalleProductoRepository){
+    public ProductoService(ProductoRepository productoRepository){
         this.productoRepository = productoRepository;
-        this.detalleProductoRepository = detalleProductoRepository;
     }
 
 
@@ -81,9 +77,23 @@ public class ProductoService {
         return MapObject.mapToProductResponse(producto);
     }
 
-    public List<DetalleProductoResponse> getDetailProductsByProducto(Long idProducto){
-        List<DetalleProducto> detailProductos = this.detalleProductoRepository.findByProductoId(idProducto);
-        return detailProductos.stream().map(MapObject::mapToDetalleProductoResponse).toList();
+
+    @Transactional
+    public ProductoResponse updateProducto(ProductoRequest productoRequest){
+        if (Objects.isNull(productoRequest.getId()))
+            throw  new EntityExistException("El producto no existe");
+
+        Optional<Producto> optionalProducto = this.productoRepository.findById(productoRequest.getId());
+        if (!optionalProducto.isPresent()){
+            throw  new EntityExistException("El producto no existe");
+        }
+        Producto producto = optionalProducto.get();
+        producto.setClave(productoRequest.getClave());
+        producto.setDescripcion(productoRequest.getDescripcion());
+        producto.setImagen(productoRequest.getImagen());
+
+        this.productoRepository.save(producto);
+        return MapObject.mapToProductResponse(producto);
     }
 
 
